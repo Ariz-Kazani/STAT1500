@@ -1,0 +1,9 @@
+---
+title: "Assignment 1"
+author: "Ariz Kazani"
+date: "2024-05-31"
+output: pdf_document
+---
+
+# hello 
+
