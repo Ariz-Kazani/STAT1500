@@ -16,13 +16,19 @@ output: pdf_document
 ### (a) Create a vector named sales that contains the following sales figures for a week: 250, 310, 450, 500, 620, 715, and 840 
 
 ```{r}
-sales <- c(250, 310, 450, 500, 620, 715, 840 )
+sales <- c(250, 310, 450, 500, 620, 715, 840)
 ```
 
 ### (b) Write a function named sales_summary that takes a vector as input and returns the sum and mean of the vector. Test your function using the sales vector.
 
 ```{r}
-x <- 10
+sales_summary <- function(vector) {
+  sum <- sum(vector)
+  mean <- mean(vector)
+  return(sum, sum)
+}
+
+sales_summary(sales)
 
 ```
 
