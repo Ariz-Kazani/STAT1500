@@ -42,7 +42,7 @@ sales_summary(sales)
 ### (c) Write a function named adjust_sales that takes a vector and a percentage as inputs, adjusts each entry in the vector by the given percentage, and returns the adjusted vector in descending order. Test your function with the sales vector and a 10% increase.
 
 ```{r}
-# A function that that takes a vector and a percentage as a peram
+# A function that that takes a vector and a percentage as a param
 # Returns a new vector adjusted by the percentage
 # @param vector
 # @param percentage
@@ -52,7 +52,7 @@ adjust_sales <- function(vector, percentage) {
   return(newVector)
 }
 
-adjust_sales(sales, 10)
+salesADJ <- adjust_sales(sales, 10)
 
 ```
 
@@ -60,9 +60,7 @@ adjust_sales(sales, 10)
 
 ```{r}
 randomVector = c(22, 3, 24, 536, 774678, 895676, 57635, 24344, 123, 534)
-```
 
-```{r}
 sales_summary(randomVector)
 ```
 
@@ -75,7 +73,12 @@ adjust_sales(randomVector, 17)
 ### (f) Plot the original sales vector and the adjusted sales vector (from Part 3) on the same graph using different colors. Label the axes and add a legend.
 
 ```{r}
-# TODO: fill this out
+# TODO: fix this when the lecture comes out
+plot(sales, type="o", col="blue", ylim=range(c(sales, salesADJ)), main="Multiple Vectors Plot", xlab="Index", ylab="Value")
+
+lines(salesADJ, type="o", col="red")
+
+legend("bottomright", legend=c("Sales", "Adjusted Sales"), col=c("blue", "red"), lty=1)
 ```
 
 ------------------------------------------------------------------------
