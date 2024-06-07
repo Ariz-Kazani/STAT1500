@@ -25,9 +25,6 @@ sales <- c(250, 310, 450, 500, 620, 715, 840)
 ### (b) Write a function named sales_summary that takes a vector as input and returns the sum and mean of the vector. Test your function using the sales vector.
 
 ```{r}
-# A function that takes a vector as a param
-# Returns the sum and mean of a vector
-# @param vector
 sales_summary <- function(vector) {
   Sum <- sum(vector)
   Mean <- mean(vector)
@@ -36,16 +33,11 @@ sales_summary <- function(vector) {
 }
 
 sales_summary(sales)
-
 ```
 
 ### (c) Write a function named adjust_sales that takes a vector and a percentage as inputs, adjusts each entry in the vector by the given percentage, and returns the adjusted vector in descending order. Test your function with the sales vector and a 10% increase.
 
 ```{r}
-# A function that that takes a vector and a percentage as a param
-# Returns a new vector adjusted by the percentage
-# @param vector
-# @param percentage
 adjust_sales <- function(vector, percentage) {
   newVector <- vector * ((percentage + 100 )/100)
   sort(newVector, decreasing=TRUE)
@@ -53,7 +45,6 @@ adjust_sales <- function(vector, percentage) {
 }
 
 salesADJ <- adjust_sales(sales, 10)
-
 ```
 
 ### (d) Create another test for the sales_summary function with a random vector of 10 elements. Print the result to check if your function works correctly with different inputs.
@@ -88,21 +79,46 @@ legend("bottomright", legend=c("Sales", "Adjusted Sales"), col=c("blue", "red"),
 ### (a) Create a dataframe named students with the following data: Name: "Alice", "Bob", "Charlie", "David", "Eva" Age: 23, 22, 24, 21, 23 Score: 85, 92, 78, 88, 90
 
 ```{r}
-# TODO: fill this out
+names <- c("Alice", "Bob", "Charlie", "David", "Eva")
+ages <- c(23, 22, 24, 21, 23)
+scores <- c(85, 92, 78, 88, 90)
+
+df = data.frame(Name = names, Age = ages, Score = scores)
+
+df
 ```
 
 ### (b) Add a new column to the students dataframe named Passed with a value of TRUE if the Score is 80 or above, and FALSE otherwise.
 
+```{r}
+df$Passed <- df$Score >= 80 
+
+df
+```
+
 ### (c) Calculate the mean, median, and standard deviation of the Age and Score columns in the students dataframe.
 
 ```{r}
-# TODO: fill this out
+meanAge = mean(df$Age)
+stdAge = sd(df$Age)
+meanScore = mean(df$Score)
+stdScore = sd(df$Score)
+
+meanAge
+stdAge
+meanScore
+stdScore
 ```
 
 ### (d) Identify the student(s) with the highest score and display their details.
 
 ```{r}
-# TODO: fill this out
+maxScore = max(df$Score)
+
+studentsWMS <- df[which(df$Score == maxScore),]
+
+studentsWMS
+
 ```
 
 ### (e) Filter the dataframe to show only the students who passed and save it as a new dataframe named passed_students.
