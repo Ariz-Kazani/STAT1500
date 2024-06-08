@@ -269,25 +269,57 @@ high_earners <- employees[which(employees$AdjustedSalary > 70000), ]
 -   QuantitySold: 150, 200, 300, 400, 250
 
 ```{r}
-# TODO: fill this out
+products <- data.frame(
+  ProductID = c(201, 202, 203, 204, 205),
+  ProductName =  c("Laptop", "Smartphone", "Tablet", "Headphones", "Smartwatch"),
+  Category = c(
+    "Electronics",
+    "Electronics",
+    "Electronics",
+    "Accessories",
+    "Electronics"
+  ),
+  Price = c(1200, 800, 600, 200, 350),
+  QuantitySold = c(150, 200, 300, 400, 250)
+)
 ```
 
 ### (b) Calculate the total revenue for each product (Price \* QuantitySold). Write a function named calculate_revenue that adds a new column Revenue to the products dataframe.
 
 ```{r}
-# TODO: fill this out
+calculate_revenue <- function(dataFrame) {
+  dataFrame$Revenue <- dataFrame$Price * dataFrame$QuantitySold
+  return(dataFrame)
+}
+
+products <- calculate_revenue(products)
 ```
 
 ### (c) Identify the product with the highest revenue and display its details.
 
 ```{r}
-# TODO: fill this out
+maxRevenue <- max(products$Revenue)
+products[which(products$Revenue == maxRevenue), ]
 ```
 
 ### (d) Group the products by Category and calculate the total revenue for each category. Write a function named category_revenue that returns a summary dataframe with Category and TotalRevenue.
 
 ```{r}
-# TODO: fill this out
+category_revenue <- function(dataFrame) {
+  dataByProduct <- function(dataFrame, category) {
+    toteRev <- sum(dataFrame[which(dataFrame$Category == category),]$Revenue)
+    returnDf <- data.frame(Category = category, TotalRevenue = toteRev)
+    return(returnDf)
+  }
+  catagories <- unique(dataFrame$Category)
+  df <- data.frame()
+  for (cat in catagories) {
+    df <- rbind(df, dataByProduct(dataFrame, cat))
+  }
+  return(df)
+}
+
+category_revenue(products)
 ```
 
 ### (e) Create a bar chart to display the total revenue for each product, and use different colors for each category.
