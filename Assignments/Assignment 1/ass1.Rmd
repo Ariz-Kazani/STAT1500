@@ -15,8 +15,12 @@ output: pdf_document
 
 # Notes
 
-TODO: add information about assignment and libraries used
-  - make sure to double check and double read each question
+```{r}
+# TODO: add information about assignment and libraries used
+#     - make sure to double check and double read each question
+#     - format code ctr + shift + a
+
+```
 
 ------------------------------------------------------------------------
 
@@ -46,12 +50,12 @@ sales_summary(sales)
 
 ```{r}
 adjust_sales <- function(vector, percentage) {
-  newVector <- vector * ((percentage + 100 )/100)
-  sort(newVector, decreasing=TRUE)
+  newVector <- vector * ((percentage + 100) / 100)
+  sort(newVector, decreasing = TRUE)
   return(newVector)
 }
 
-salesADJ <- adjust_sales(sales, 10)
+adjust_sales(sales, 10)
 ```
 
 ### (d) Create another test for the sales_summary function with a random vector of 10 elements. Print the result to check if your function works correctly with different inputs.
@@ -72,35 +76,50 @@ adjust_sales(randomVector, 17)
 
 ```{r}
 # TODO: fix this when the lecture comes out
-plot(sales, type="o", col="blue", ylim=range(c(sales, salesADJ)), main="Multiple Vectors Plot", xlab="Index", ylab="Value")
+plot(
+  sales,
+  type = "o",
+  col = "blue",
+  ylim = range(c(sales, salesADJ)),
+  main = "Multiple Vectors Plot",
+  xlab = "Index",
+  ylab = "Value"
+)
 
-lines(salesADJ, type="o", col="red")
+lines(salesADJ, type = "o", col = "red")
 
-legend("bottomright", legend=c("Sales", "Adjusted Sales"), col=c("blue", "red"), lty=1)
+legend(
+  "bottomright",
+  legend = c("Sales", "Adjusted Sales"),
+  col = c("blue", "red"),
+  lty = 1
+)
 ```
 
 ------------------------------------------------------------------------
 
 ## Question 2. Dataframe Operations and Descriptive Statistics
 
-### (a) Create a dataframe named students with the following data: Name: "Alice", "Bob", "Charlie", "David", "Eva" Age: 23, 22, 24, 21, 23 Score: 85, 92, 78, 88, 90
+### (a) Create a dataframe named students with the following data:
+
+-   Name: "Alice", "Bob", "Charlie", "David", "Eva"
+-   Age: 23, 22, 24, 21, 23
+-   Score: 85, 92, 78, 88, 90
 
 ```{r}
-names <- c("Alice", "Bob", "Charlie", "David", "Eva")
-ages <- c(23, 22, 24, 21, 23)
-scores <- c(85, 92, 78, 88, 90)
-
-students = data.frame(Name = names, Age = ages, Score = scores)
-
-students
+students = data.frame(
+  Name = c("Alice", "Bob", "Charlie", "David", "Eva"),
+  Age = c(23, 22, 24, 21, 23),
+  Score = c(85, 92, 78, 88, 90)
+)
 ```
 
 ### (b) Add a new column to the students dataframe named Passed with a value of TRUE if the Score is 80 or above, and FALSE otherwise.
 
 ```{r}
-students$Passed <- students$Score >= 80 
+students$Passed <- students$Score >= 80
 
-df
+students
 ```
 
 ### (c) Calculate the mean, median, and standard deviation of the Age and Score columns in the students dataframe.
@@ -112,13 +131,6 @@ stdAge = sd(students$Age)
 meanScore = mean(students$Score)
 medianScore = median(students$Score)
 stdScore = sd(students$Score)
-
-meanAge
-stdAge
-medianAge
-meanScore
-medianScore
-stdScore
 ```
 
 ### (d) Identify the student(s) with the highest score and display their details.
@@ -126,18 +138,15 @@ stdScore
 ```{r}
 maxScore = max(students$Score)
 
-studentsWMS <- students[which(students$Score == maxScore),]
+studentsWMS <- students[which(students$Score == maxScore), ]
 
 studentsWMS
-
 ```
 
 ### (e) Filter the dataframe to show only the students who passed and save it as a new dataframe named passed_students.
 
 ```{r}
-passed_students <- students[which(students$Passed),]
-
-passed_students
+passed_students <- students[which(students$Passed), ]
 ```
 
 ### (f) Create a bar chart showing the scores of all students. Use different colors for those who passed and those who did not.
@@ -165,14 +174,13 @@ passed_students
 -   Experience: 3, 7, 5, 10, 4
 
 ```{r}
-employeeID <- c(101, 102, 103, 104, 105)
-name <-  c("John", "Jane", "Doe", "Smith", "Emily")
-department <-  c("Sales", "HR", "IT", "Finance", "Marketing")
-salary <-  c(60000, 65000, 70000, 72000, 68000)
-experience <-  c(3, 7, 5, 10, 4)
-
-employees <- data.frame(EmployeeID = employeeID, Name = name, Department = department, 
-                        Salary = salary, Experience = experience)
+employees <- data.frame(
+  EmployeeID = c(101, 102, 103, 104, 105),
+  Name = c("John", "Jane", "Doe", "Smith", "Emily"),
+  Department = c("Sales", "HR", "IT", "Finance", "Marketing"),
+  Salary = c(60000, 65000, 70000, 72000, 68000),
+  Experience = c(3, 7, 5, 10, 4)
+)
 
 employees
 ```
@@ -183,9 +191,14 @@ employees
 department_summary <- function(dataFrame) {
   getMeanMedian <- function(df, name) {
     dfWithName <- df[which(df$Department == name), ]
-    returnDF = data.frame(DepartmentName = name, MeanSalary = mean(dfWithName$Salary), MedianSalary = median(dfWithName$Salary))
+    returnDF = data.frame(
+      DepartmentName = name,
+      MeanSalary = mean(dfWithName$Salary),
+      MedianSalary = median(dfWithName$Salary)
+    )
     return(returnDF)
   }
+  
   departments <- unique(dataFrame$Department)
   df = data.frame()
   for (dep in departments) {
@@ -202,7 +215,7 @@ department_summary(employees)
 ```{r}
 top_earner <- function(dataFrame) {
   getMax <- function(df, dep) {
-    peopleByDep <- df[which(df$Department == dep),]
+    peopleByDep <- df[which(df$Department == dep), ]
     maxSal <- max(peopleByDep$Salary)
     topEarner <- peopleByDep[which(peopleByDep$Salary == maxSal), ]
     return(topEarner)
@@ -221,13 +234,14 @@ top_earner(employees)
 ### (d) Add a new column to the employees dataframe named AdjustedSalary, which is the Salary adjusted for experience (increase by 2% for each year of experience).
 
 ```{r}
-employees$AdjustedSalary <- employees$Salary * ((100 + employees$Experience * 2)/100)
+employees$AdjustedSalary <- employees$Salary *
+  ((100 + employees$Experience * 2) / 100)
 ```
 
 ### (e) Filter the dataframe to show only employees with an adjusted salary above 70,000 and save it as a new dataframe named high_earners.
 
 ```{r}
-high_earners <- employees[which(employees$AdjustedSalary > 70000),]
+high_earners <- employees[which(employees$AdjustedSalary > 70000), ]
 ```
 
 ### (f) Create a boxplot to compare the distribution of original salaries and adjusted salaries across different departments. Add appropriate labels and a title.
@@ -237,6 +251,10 @@ high_earners <- employees[which(employees$AdjustedSalary > 70000),]
 ```
 
 ### (g) Write a short analysis (4-6 sentences) interpreting the results from the summary statistics, top earners, and the boxplot.
+
+```{r}
+# TODO: fill this out
+```
 
 ------------------------------------------------------------------------
 
@@ -357,7 +375,7 @@ This dataset has three variables (Girth, Height, Volume) on 31 felled black cher
 ### (b)
 
 -   Convert each Girth (diameter) to a radius $r$.
--   Calculate the cross-sectional area of each tree using $3.14 \times r$^2^.
+-   Calculate the cross-sectional area of each tree using \$3.14 \\times r\$^2^.
 -   Calculate and output the interquartile range (IQR) of the areas.
 
 ### (c)
