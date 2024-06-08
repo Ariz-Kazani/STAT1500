@@ -13,6 +13,13 @@ output: pdf_document
 
 ------------------------------------------------------------------------
 
+# Notes
+
+TODO: add information about assignment and libraries used
+  - make sure to double check and double read each question
+
+------------------------------------------------------------------------
+
 ## Question 1. Function Creation and Vector Operations
 
 ### (a) Create a vector named sales that contains the following sales figures for a week: 250, 310, 450, 500, 620, 715, and 840
@@ -83,15 +90,15 @@ names <- c("Alice", "Bob", "Charlie", "David", "Eva")
 ages <- c(23, 22, 24, 21, 23)
 scores <- c(85, 92, 78, 88, 90)
 
-df = data.frame(Name = names, Age = ages, Score = scores)
+students = data.frame(Name = names, Age = ages, Score = scores)
 
-df
+students
 ```
 
 ### (b) Add a new column to the students dataframe named Passed with a value of TRUE if the Score is 80 or above, and FALSE otherwise.
 
 ```{r}
-df$Passed <- df$Score >= 80 
+students$Passed <- students$Score >= 80 
 
 df
 ```
@@ -99,23 +106,27 @@ df
 ### (c) Calculate the mean, median, and standard deviation of the Age and Score columns in the students dataframe.
 
 ```{r}
-meanAge = mean(df$Age)
-stdAge = sd(df$Age)
-meanScore = mean(df$Score)
-stdScore = sd(df$Score)
+meanAge = mean(students$Age)
+medianAge = median(students$Age)
+stdAge = sd(students$Age)
+meanScore = mean(students$Score)
+medianScore = median(students$Score)
+stdScore = sd(students$Score)
 
 meanAge
 stdAge
+medianAge
 meanScore
+medianScore
 stdScore
 ```
 
 ### (d) Identify the student(s) with the highest score and display their details.
 
 ```{r}
-maxScore = max(df$Score)
+maxScore = max(students$Score)
 
-studentsWMS <- df[which(df$Score == maxScore),]
+studentsWMS <- students[which(students$Score == maxScore),]
 
 studentsWMS
 
@@ -124,7 +135,9 @@ studentsWMS
 ### (e) Filter the dataframe to show only the students who passed and save it as a new dataframe named passed_students.
 
 ```{r}
-# TODO: fill this out
+passed_students <- students[which(students$Passed),]
+
+passed_students
 ```
 
 ### (f) Create a bar chart showing the scores of all students. Use different colors for those who passed and those who did not.
@@ -152,31 +165,69 @@ studentsWMS
 -   Experience: 3, 7, 5, 10, 4
 
 ```{r}
-# TODO: fill this out
+employeeID <- c(101, 102, 103, 104, 105)
+name <-  c("John", "Jane", "Doe", "Smith", "Emily")
+department <-  c("Sales", "HR", "IT", "Finance", "Marketing")
+salary <-  c(60000, 65000, 70000, 72000, 68000)
+experience <-  c(3, 7, 5, 10, 4)
+
+employees <- data.frame(EmployeeID = employeeID, Name = name, Department = department, 
+                        Salary = salary, Experience = experience)
+
+employees
 ```
 
 ### (b) Calculate the mean and median salary for each department. Write a function named department_summary that returns a summary dataframe containing the department name, mean salary, and median salary.
 
 ```{r}
-# TODO: fill this out
+department_summary <- function(dataFrame) {
+  getMeanMedian <- function(df, name) {
+    dfWithName <- df[which(df$Department == name), ]
+    returnDF = data.frame(DepartmentName = name, MeanSalary = mean(dfWithName$Salary), MedianSalary = median(dfWithName$Salary))
+    return(returnDF)
+  }
+  departments <- unique(dataFrame$Department)
+  df = data.frame()
+  for (dep in departments) {
+    df <- rbind(df, getMeanMedian(dataFrame, dep))
+  }
+  return(df)
+}
+
+department_summary(employees)
 ```
 
 ### (c) Identify and display details of the employee with the highest salary in each department. Write a function named top_earner to achieve this.
 
 ```{r}
-# TODO: fill this out
+top_earner <- function(dataFrame) {
+  getMax <- function(df, dep) {
+    peopleByDep <- df[which(df$Department == dep),]
+    maxSal <- max(peopleByDep$Salary)
+    topEarner <- peopleByDep[which(peopleByDep$Salary == maxSal), ]
+    return(topEarner)
+  }
+  departments <- unique(dataFrame$Department)
+  df = data.frame()
+  for (dep in departments) {
+    df <- rbind(df, getMax(dataFrame, dep))
+  }
+  return(df)
+}
+
+top_earner(employees)
 ```
 
 ### (d) Add a new column to the employees dataframe named AdjustedSalary, which is the Salary adjusted for experience (increase by 2% for each year of experience).
 
 ```{r}
-# TODO: fill this out
+employees$AdjustedSalary <- employees$Salary * ((100 + employees$Experience * 2)/100)
 ```
 
 ### (e) Filter the dataframe to show only employees with an adjusted salary above 70,000 and save it as a new dataframe named high_earners.
 
 ```{r}
-# TODO: fill this out
+high_earners <- employees[which(employees$AdjustedSalary > 70000),]
 ```
 
 ### (f) Create a boxplot to compare the distribution of original salaries and adjusted salaries across different departments. Add appropriate labels and a title.
