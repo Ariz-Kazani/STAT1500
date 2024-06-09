@@ -57,11 +57,12 @@ sales_summary(sales)
 ```{r}
 adjust_sales <- function(vector, percentage) {
   newVector <- vector * ((percentage + 100) / 100)
-  sort(newVector, decreasing = TRUE)
+  newVector <- sort(newVector, decreasing = TRUE)
   return(newVector)
 }
 
-adjust_sales(sales, 10)
+salesADJ <- adjust_sales(sales, 10)
+salesADJ
 ```
 
 ### (d) Create another test for the **sales_summary** function with a random vector of 10 elements. Print the result to check if your function works correctly with different inputs.
@@ -81,25 +82,24 @@ adjust_sales(randomVector, 17)
 ### (f) Plot the original sales vector and the adjusted sales vector (from Part 3) on the same graph using different colors. Label the axes and add a legend.
 
 ```{r}
-# TODO: fix this when the lecture comes out
-# plot(
-#   sales,
-#   type = "o",
-#   col = "blue",
-#   ylim = range(c(sales, salesADJ)),
-#   main = "Multiple Vectors Plot",
-#   xlab = "Index",
-#   ylab = "Value"
-# )
-# 
-# lines(salesADJ, type = "o", col = "red")
-# 
-# legend(
-#   "bottomright",
-#   legend = c("Sales", "Adjusted Sales"),
-#   col = c("blue", "red"),
-#   lty = 1
-# )
+plot(
+  sales,
+  type = "o",
+  col = "blue",
+  ylim = range(c(sales, salesADJ)),
+  main = "Sales amout by day",
+  xlab = "Days",
+  ylab = "Sales"
+)
+
+lines(salesADJ, type = "o", col = "red")
+
+legend(
+  3, 900,
+  legend = c("Sales", "Adjusted Sales"),
+  col = c("blue", "red"),
+  lty = 1
+)
 ```
 
 ------------------------------------------------------------------------
@@ -118,6 +118,8 @@ students = data.frame(
   Age = c(23, 22, 24, 21, 23),
   Score = c(85, 92, 78, 88, 90)
 )
+
+students
 ```
 
 ### (b) Add a new column to the students dataframe named Passed with a value of TRUE if the Score is 80 or above, and FALSE otherwise.
@@ -131,12 +133,20 @@ students
 ### (c) Calculate the mean, median, and standard deviation of the Age and Score columns in the students dataframe.
 
 ```{r}
-meanAge = mean(students$Age)
-medianAge = median(students$Age)
-stdAge = sd(students$Age)
-meanScore = mean(students$Score)
-medianScore = median(students$Score)
-stdScore = sd(students$Score)
+ageData <- list(
+  AgeMean = mean(students$Age),
+  AgeMedian = median(students$Age),
+  AgeSD = sd(students$Age)
+)
+
+scoreData <- list(
+  ScoreMean = mean(students$Score),
+  ScoreMedian = median(students$Score),
+  ScoreSD = sd(students$Score)
+)
+
+ageData
+scoreData
 ```
 
 ### (d) Identify the student(s) with the highest score and display their details.
@@ -153,19 +163,29 @@ studentsWMS
 
 ```{r}
 passed_students <- students[students$Passed, ]
+
+passed_students
 ```
 
 ### (f) Create a bar chart showing the scores of all students. Use different colors for those who passed and those who did not.
 
 ```{r}
-# TODO: fill this out
+barplot(
+  students$Score,
+  names.arg = students$Name,
+  ylim = c(0, 120),
+  ylab = "Scores",
+  xlab = "Names",
+  col = ifelse(students$Passed, "Green", "Red"),
+)
+legend("topleft",
+       legend = c("Passed", "Failed"),
+       fill = c("Green", "Red"),)
 ```
 
 ### (g) Write a short summary (3-5 sentences) interpreting the statistical results and the bar chart created in the previous steps.
 
-```{r}
-# TODO: fill this out
-```
+From the presented data, we can conclude that most people passed, scoring well over the required 80%. we can also see that most people scored higher than the mean, with Alice and Charlie being the exceptions. The bar chart does not show any correlation between gender and the likelihood of passing. We can also see that most people are within one standard deviation form the mean, with Charlie and Bob being the exceptions.
 
 ------------------------------------------------------------------------
 
@@ -202,7 +222,7 @@ department_summary <- function(dataFrame) {
       MeanSalary = mean(dfWithName$Salary),
       MedianSalary = median(dfWithName$Salary)
     )
-    return(returnDF)
+    return(summary(returnDF))
   }
   
   departments <- unique(dataFrame$Department)
@@ -242,25 +262,38 @@ top_earner(employees)
 ```{r}
 employees$AdjustedSalary <- employees$Salary *
   ((100 + employees$Experience * 2) / 100)
+
+employees
 ```
 
 ### (e) Filter the dataframe to show only employees with an adjusted salary above 70,000 and save it as a new dataframe named high_earners.
 
 ```{r}
 high_earners <- employees[employees$AdjustedSalary > 70000, ]
+
+high_earners
 ```
 
 ### (f) Create a boxplot to compare the distribution of original salaries and adjusted salaries across different departments. Add appropriate labels and a title.
 
 ```{r}
-# TODO: fill this out
+boxplot(
+  employees$Salary ~ employees$Department,
+  main = "Distribution of Salaries Across Departments",
+  xlab = "Department",
+  ylab = "Original Salary",
+)
+boxplot(
+  employees$AdjustedSalary ~ employees$Department,
+  main = "Distribution of Adjusted Salaries Across Departments",
+  xlab = "Department",
+  ylab = "Adjusted Salary",
+)
 ```
 
 ### (g) Write a short analysis (4-6 sentences) interpreting the results from the summary statistics, top earners, and the boxplot.
 
-```{r}
-# TODO: fill this out
-```
+From the statistics we can see that the mean and median are exactly the same because there is only one person in each department. From the top-earners we can see that most people are earning above 70000 with the exception being sales. This is likely the case as sales has the lowest starting salary and the person working sales has been there the least amount of time. From the box plots we can see that the mean of the salary between all departments has increased, with the biggest jump happening from finance. We can also see, with the adjustment HR's mean salary goes from 4th to 3rd.
 
 ------------------------------------------------------------------------
 
@@ -299,6 +332,8 @@ calculate_revenue <- function(dataFrame) {
 }
 
 products <- calculate_revenue(products)
+
+products
 ```
 
 ### (c) Identify the product with the highest revenue and display its details.
@@ -331,16 +366,50 @@ category_revenue(products)
 ### (e) Create a bar chart to display the total revenue for each product, and use different colors for each category.
 
 ```{r}
-# TODO: fill this out
+# Create a list with categories as names and colors as values
+categories <- unique(products$Category)
+numCat <- length(categories)
+colours <- rainbow(numCat)
+
+colourList <- list()
+for (i in 1:numCat) {
+  colourList[[categories[i]]] <- colours[i]
+}
+
+barplot(
+  products$Revenue,
+  names.arg = products$ProductName,
+  ylab = "Revenue",
+  xlab = "Product",
+  col = sapply(products$Category, function(col) colourList[[col]])
+)
+
+legend("topright",
+       legend = categories,
+       fill = colours)
 ```
 
 ### (f) Generate a scatter plot of Price versus QuantitySold with different colors for each category. Add a trend line to the plot.
 
 ```{r}
-# TODO: fill this out
+plot(
+  products$Price,
+  products$QuantitySold,
+  col = sapply(products$Category, function(col)
+    colourList[[col]])
+)
+abline(lm(products$QuantitySold ~ products$Price), col = "Black")
+
+legend("topright",
+       legend = categories,
+       fill = colours)
 ```
 
-### (g) Write a detailed report (5-7 sentences) analyzing the
+### Write a detailed report (5-7 sentences) analyzing the product revenues, category revenues, and the relationship
+
+between price and quantity sold from the scatter plot.
+
+Laptop's and Tablets tied for the highest revenues, both at 180000, followed by Smartphone's at 160000, after that Smart watch's at 87500 and lastly Headphones with 80000. From this data we can see that the highest earner for accessories still made less than the lowest earner for electronics. This was also a contributing factor to the revenues of electronics as a whole being a lot higher than accessories, although it is important to note that there were a lot more electronic products than accessories. Based on the scatter plot we can conclude that the higher priced a product is the fewer number of units are going to be sold. As a general note, the more expensive products also generated more revenues. 
 
 ------------------------------------------------------------------------
 
@@ -360,7 +429,7 @@ high_scorers_ages <- students[students$Score > 80][, "Age"]
 print(high_scorers_ages)
 ```
 
-**Explanation:** `students[students$Score > 80]` is not correctly specifying rows and columns, to fix this we need to add a comma after specifying the columns like this `students[students$Score > 80,]`. Although it is not syntactically wrong we can also combine `students[students$Score > 80, ]` and `[, "Age"]` to look more clean `students[students$Score > 80, "Age"]`. **Corrected Code: **
+**Explanation:** `students[students$Score > 80]` is not correctly specifying rows and columns, to fix this we need to add a comma after specifying the columns like this `students[students$Score > 80,]`. Although it is not syntactically wrong we can also combine `students[students$Score > 80, ]` and `[, "Age"]` to look more clean `students[students$Score > 80, "Age"]`. **Corrected Code:**
 
 ```{r}
 students <- data.frame(
@@ -386,7 +455,7 @@ salary <- employee_list["Salaries"]
 print(salary)
 ```
 
-**Explanation:** The salary of the employee is not correctly being accessed. It was assigned as `Salary` but we are attempting to get `"Salaries"`. Instead we need to get `"Salary"`. **Corrected Code: **
+**Explanation:** The salary of the employee is not correctly being accessed. It was assigned as `Salary` but we are attempting to get `"Salaries"`. Instead we need to get `"Salary"`. **Corrected Code:**
 
 ```{r}
 employee_list <- list(
@@ -409,7 +478,7 @@ value <- sales_data[3, 3, 0]
 print(value)
 ```
 
-**Explanation:** The first issue is that we aren't correctly selecting the row and column if we want the second row and second column we want to get the data from `[2, 2,]`. the second issue is that we are not correctly accessing the first matrix, since R is 1 indexed and not 0, to get the first matrix we need to use 1 to access it and not 0: `sales_data[2, 2, 1]`. **Corrected Code: **
+**Explanation:** The first issue is that we aren't correctly selecting the row and column if we want the second row and second column we want to get the data from `[2, 2,]`. the second issue is that we are not correctly accessing the first matrix, since R is 1 indexed and not 0, to get the first matrix we need to use 1 to access it and not 0: `sales_data[2, 2, 1]`. **Corrected Code:**
 
 ```{r}
 sales_data <- array(1:27, dim = c(3, 3, 3))
@@ -433,7 +502,7 @@ expensive_products <- products[products$Price >= "500", ]
 print(expensive_products)
 ```
 
-**Explanation:** The first issue is that we are trying to compare string value with a numeric value. When this happens the numeric value gets converted into a string and gets compared lexicographically. This will not always give the desired result, for example `1200` gets converted into `"1200"` and then gets compared with `"500"`. Since `"1"` is smaller than `"5"` it will not add it. Another issue is that we want to get prices above 500 but we are also including 500 which is not what we want. **Corrected Code: **
+**Explanation:** The first issue is that we are trying to compare string value with a numeric value. When this happens the numeric value gets converted into a string and gets compared lexicographically. This will not always give the desired result, for example `1200` gets converted into `"1200"` and then gets compared with `"500"`. Since `"1"` is smaller than `"5"` it will not add it. Another issue is that we want to get prices above 500 but we are also including 500 which is not what we want. **Corrected Code:**
 
 ```{r}
 products <- data.frame(
