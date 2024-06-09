@@ -20,6 +20,7 @@ output: pdf_document
 #     - make sure to double check and double read each question
 #     - format code ctr + shift + a
 #     - test all code to make sure its still working
+#     - use sumaryfunction for dataframes where applicable
 
 ```
 
@@ -359,11 +360,7 @@ high_scorers_ages <- students[students$Score > 80][, "Age"]
 print(high_scorers_ages)
 ```
 
-##### Explanation:
-
-`students[students$Score > 80]` is not correctly specifying rows and columns, to fix this we need to add a comma after specifying the columns like this `students[students$Score > 80,]`. Although it is not syntactically wrong we can also combine `students[students$Score > 80, ]` and `[, "Age"]` to look more clean `students[students$Score > 80, "Age"]`.
-
-##### Corrected Code:
+**Explanation:** `students[students$Score > 80]` is not correctly specifying rows and columns, to fix this we need to add a comma after specifying the columns like this `students[students$Score > 80,]`. Although it is not syntactically wrong we can also combine `students[students$Score > 80, ]` and `[, "Age"]` to look more clean `students[students$Score > 80, "Age"]`. **Corrected Code: **
 
 ```{r}
 students <- data.frame(
@@ -389,11 +386,7 @@ salary <- employee_list["Salaries"]
 print(salary)
 ```
 
-##### Explanation:
-
-The salary of the employee is not correctly being accessed. It was assigned as `Salary` but we are attempting to get `"Salaries"`. Instead we need to get `"Salary"`.
-
-##### Corrected Code:
+**Explanation:** The salary of the employee is not correctly being accessed. It was assigned as `Salary` but we are attempting to get `"Salaries"`. Instead we need to get `"Salary"`. **Corrected Code: **
 
 ```{r}
 employee_list <- list(
@@ -416,11 +409,7 @@ value <- sales_data[3, 3, 0]
 print(value)
 ```
 
-##### Explanation:
-
-The first issue is that we aren't correctly selecting the row and column if we want the second row and second column we want to get the data from `[2, 2,]`. the second issue is that we are not correctly accessing the first matrix, since R is 1 indexed and not 0, to get the first matrix we need to use 1 to access it and not 0: `sales_data[2, 2, 1]`.
-
-##### Corrected Code:
+**Explanation:** The first issue is that we aren't correctly selecting the row and column if we want the second row and second column we want to get the data from `[2, 2,]`. the second issue is that we are not correctly accessing the first matrix, since R is 1 indexed and not 0, to get the first matrix we need to use 1 to access it and not 0: `sales_data[2, 2, 1]`. **Corrected Code: **
 
 ```{r}
 sales_data <- array(1:27, dim = c(3, 3, 3))
@@ -444,11 +433,7 @@ expensive_products <- products[products$Price >= "500", ]
 print(expensive_products)
 ```
 
-##### Explanation:
-
-The first issue is that we are trying to compare string value with a numeric value. When this happens the numeric value gets converted into a string and gets compared lexicographically. This will not always give the desired result, for example `1200` gets converted into `"1200"` and then gets compared with `"500"`. Since `"1"` is smaller than `"5"` it will not add it. Another issue is that we want to get prices above 500 but we are also including 500 which is not what we want.
-
-##### Corrected Code:
+**Explanation:** The first issue is that we are trying to compare string value with a numeric value. When this happens the numeric value gets converted into a string and gets compared lexicographically. This will not always give the desired result, for example `1200` gets converted into `"1200"` and then gets compared with `"500"`. Since `"1"` is smaller than `"5"` it will not add it. Another issue is that we want to get prices above 500 but we are also including 500 which is not what we want. **Corrected Code: **
 
 ```{r}
 products <- data.frame(
@@ -475,21 +460,50 @@ This dataset has three variables (Girth, Height, Volume) on 31 felled black cher
 -   Use apply() to return the mean values for the three variables (Girth, Height, Volume) and output these values.
 -   Determine the number of trees with Volume greater than the mean Volume.
 
+```{r}
+data(trees)
+str(trees)
+
+meanValues <- apply(trees, 2, mean)
+meanValues
+
+meanVolume <- meanValues["Volume"]
+treesBiggerMean <- sum(trees$Volume > meanVolume)
+treesBiggerMean
+```
+
 ### (b)
 
 -   Convert each Girth (diameter) to a radius $r$.
--   Calculate the cross-sectional area of each tree using $3.14 \times r$ ^2^.
+-   Calculate the cross-sectional area of each tree using $pi \times r$ ^2^.
 -   Calculate and output the interquartile range (IQR) of the areas.
+
+```{r}
+trees$Girth <- trees$Girth / 2
+
+crossSecArea <- (pi * trees$Girth ** 2)
+
+IQRCSA <- IQR(crossSecArea)
+IQRCSA 
+```
 
 ### (c)
 
 -   Create a histogram of the areas calculated in part (b).
 -   Title and label the axes.
 
+```{r}
+# TODO: sdfdmlsd
+```
+
 ### (d)
 
 -   Identify the tree with the largest area.
 -   Output its row number and the three measurements (Girth, Height, Volume) on one line
+
+```{r}
+# TODO: sdfdmlsd
+```
 
 ------------------------------------------------------------------------
 
@@ -500,18 +514,52 @@ This dataset has three variables (Girth, Height, Volume) on 31 felled black cher
 -   Load the mtcars dataset.
 -   Filter the dataset to include only cars with 6 or more cylinders and horsepower greater than 150. Save this filtered dataset as filtered_cars.
 
+```{r}
+data(mtcars)
+
+filtered_cars <- mtcars[mtcars$cyl >= 6 & mtcars$hp > 150, ]
+
+filtered_cars
+```
+
 ### (b)
 
 -   Create a function named efficiency_score that calculates an efficiency score for each car based on the formula: $Efficiency Score$ = $\frac{mpg}{(hp \times wt)}$
 -   Apply this function to the filtered_cars dataset and add the resulting scores as a new column named Efficiency.
+
+```{r}
+efficiency_score <- function(dataFrame) {
+  efs <- dataFrame$mpg / (dataFrame$hp * dataFrame$wt)
+  return(efs)
+}
+
+filtered_cars$Efficiency <- efficiency_score(filtered_cars)
+filtered_cars
+```
 
 ### (c)
 
 -   Identify rows where the Efficiency score is less than the 1st percentile or greater than the 99th percentile of all Efficiency scores.
 -   Replace these outlier values with the mean Efficiency score of the remaining cars.
 
+```{r}
+percential <- quantile(filtered_cars$Efficiency, probs = c(0.01, 0.99))
+
+outLiers <- which(filtered_cars$Efficiency < percential[1] | filtered_cars$Efficiency > percential[2])
+
+meanRC <- mean(filtered_cars$Efficiency[-outLiers])
+
+filtered_cars$Efficiency[outLiers] <- meanRC
+filtered_cars
+
+```
+
 ### (d)
 
 -   Create a scatter plot of hp versus Efficiency, with points colored by the number of cylinders (cyl).
 -   Add a trend line to the scatter plot.
 -   Write a detailed analysis (6-8 sentences) interpreting the relationship between horsepower and efficiency, considering the number of cylinders.
+
+```{r}
+# TODO: sdfdmlsd
+```
