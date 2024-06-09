@@ -19,21 +19,26 @@ output: pdf_document
 # TODO: add information about assignment and libraries used
 #     - make sure to double check and double read each question
 #     - format code ctr + shift + a
+#     - test all code to make sure its still working
 
 ```
 
 ------------------------------------------------------------------------
 
+# Solutions
+
+------------------------------------------------------------------------
+
 ## Question 1. Function Creation and Vector Operations
 
-### (a) Create a vector named sales that contains the following sales figures for a week: 250, 310, 450, 500, 620, 715, and 840
+### (a) Create a vector named sales that contains the following sales figures for a week: 250, 310, 450, 500, 620, 715, and 840.
 
 ```{r}
 # vector that contains sales figures
 sales <- c(250, 310, 450, 500, 620, 715, 840)
 ```
 
-### (b) Write a function named sales_summary that takes a vector as input and returns the sum and mean of the vector. Test your function using the sales vector.
+### (b) Write a function named **sales_summary** that takes a vector as input and returns the sum and mean of the vector. Test your function using the sales vector.
 
 ```{r}
 sales_summary <- function(vector) {
@@ -46,7 +51,7 @@ sales_summary <- function(vector) {
 sales_summary(sales)
 ```
 
-### (c) Write a function named adjust_sales that takes a vector and a percentage as inputs, adjusts each entry in the vector by the given percentage, and returns the adjusted vector in descending order. Test your function with the sales vector and a 10% increase.
+### (c) Write a function named **adjust_sales** that takes a vector and a percentage as inputs, adjusts each entry in the vector by the given percentage, and returns the adjusted vector in descending order. Test your function with the sales vector and a 10% increase.
 
 ```{r}
 adjust_sales <- function(vector, percentage) {
@@ -58,7 +63,7 @@ adjust_sales <- function(vector, percentage) {
 adjust_sales(sales, 10)
 ```
 
-### (d) Create another test for the sales_summary function with a random vector of 10 elements. Print the result to check if your function works correctly with different inputs.
+### (d) Create another test for the **sales_summary** function with a random vector of 10 elements. Print the result to check if your function works correctly with different inputs.
 
 ```{r}
 randomVector = c(22, 3, 24, 536, 774678, 895676, 57635, 24344, 123, 534)
@@ -138,7 +143,7 @@ stdScore = sd(students$Score)
 ```{r}
 maxScore = max(students$Score)
 
-studentsWMS <- students[which(students$Score == maxScore), ]
+studentsWMS <- students[students$Score == maxScore, ]
 
 studentsWMS
 ```
@@ -146,7 +151,7 @@ studentsWMS
 ### (e) Filter the dataframe to show only the students who passed and save it as a new dataframe named passed_students.
 
 ```{r}
-passed_students <- students[which(students$Passed), ]
+passed_students <- students[students$Passed, ]
 ```
 
 ### (f) Create a bar chart showing the scores of all students. Use different colors for those who passed and those who did not.
@@ -190,7 +195,7 @@ employees
 ```{r}
 department_summary <- function(dataFrame) {
   getMeanMedian <- function(df, name) {
-    dfWithName <- df[which(df$Department == name), ]
+    dfWithName <- df[df$Department == name, ]
     returnDF = data.frame(
       DepartmentName = name,
       MeanSalary = mean(dfWithName$Salary),
@@ -215,9 +220,9 @@ department_summary(employees)
 ```{r}
 top_earner <- function(dataFrame) {
   getMax <- function(df, dep) {
-    peopleByDep <- df[which(df$Department == dep), ]
+    peopleByDep <- df[df$Department == dep, ]
     maxSal <- max(peopleByDep$Salary)
-    topEarner <- peopleByDep[which(peopleByDep$Salary == maxSal), ]
+    topEarner <- peopleByDep[peopleByDep$Salary == maxSal, ]
     return(topEarner)
   }
   departments <- unique(dataFrame$Department)
@@ -241,7 +246,7 @@ employees$AdjustedSalary <- employees$Salary *
 ### (e) Filter the dataframe to show only employees with an adjusted salary above 70,000 and save it as a new dataframe named high_earners.
 
 ```{r}
-high_earners <- employees[which(employees$AdjustedSalary > 70000), ]
+high_earners <- employees[employees$AdjustedSalary > 70000, ]
 ```
 
 ### (f) Create a boxplot to compare the distribution of original salaries and adjusted salaries across different departments. Add appropriate labels and a title.
@@ -299,7 +304,7 @@ products <- calculate_revenue(products)
 
 ```{r}
 maxRevenue <- max(products$Revenue)
-products[which(products$Revenue == maxRevenue), ]
+products[products$Revenue == maxRevenue, ]
 ```
 
 ### (d) Group the products by Category and calculate the total revenue for each category. Write a function named category_revenue that returns a summary dataframe with Category and TotalRevenue.
@@ -307,7 +312,7 @@ products[which(products$Revenue == maxRevenue), ]
 ```{r}
 category_revenue <- function(dataFrame) {
   dataByProduct <- function(dataFrame, category) {
-    toteRev <- sum(dataFrame[which(dataFrame$Category == category),]$Revenue)
+    toteRev <- sum(dataFrame[dataFrame$Category == category, 'Revenue'])
     returnDf <- data.frame(Category = category, TotalRevenue = toteRev)
     return(returnDf)
   }
@@ -354,6 +359,22 @@ high_scorers_ages <- students[students$Score > 80][, "Age"]
 print(high_scorers_ages)
 ```
 
+##### Explanation:
+
+`students[students$Score > 80]` is not correctly specifying rows and columns, to fix this we need to add a comma after specifying the columns like this `students[students$Score > 80,]`. Although it is not syntactically wrong we can also combine `students[students$Score > 80, ]` and `[, "Age"]` to look more clean `students[students$Score > 80, "Age"]`.
+
+##### Corrected Code:
+
+```{r}
+students <- data.frame(
+  Name = c("Alice", "Bob", "Charlie", "David", "Eva"),
+  Age = c(23, 22, 24, 21, 23),
+  Score = c(85, 92, 78, 88, 90))
+# Extracting ages of students who scored above 80
+high_scorers_ages <- students[students$Score > 80, "Age"]
+print(high_scorers_ages)
+```
+
 ### (b)
 
 ```{r, eval=FALSE}
@@ -368,12 +389,43 @@ salary <- employee_list["Salaries"]
 print(salary)
 ```
 
+##### Explanation:
+
+The salary of the employee is not correctly being accessed. It was assigned as `Salary` but we are attempting to get `"Salaries"`. Instead we need to get `"Salary"`.
+
+##### Corrected Code:
+
+```{r}
+employee_list <- list(
+  Name = "John",
+  Age = 30,
+  Department = "HR",
+  Salary = 50000
+)
+# Accessing the salary of the employee
+salary <- employee_list["Salary"]
+print(salary)
+```
+
 ### (c)
 
 ```{r, eval=FALSE}
 sales_data <- array(1:27, dim = c(3, 3, 3))
 # Extracting the value in the second row, second column of the first matrix
 value <- sales_data[3, 3, 0]
+print(value)
+```
+
+##### Explanation:
+
+The first issue is that we aren't correctly selecting the row and column if we want the second row and second column we want to get the data from `[2, 2,]`. the second issue is that we are not correctly accessing the first matrix, since R is 1 indexed and not 0, to get the first matrix we need to use 1 to access it and not 0: `sales_data[2, 2, 1]`.
+
+##### Corrected Code:
+
+```{r}
+sales_data <- array(1:27, dim = c(3, 3, 3))
+# Extracting the value in the second row, second column of the first matrix
+value <- sales_data[2, 2, 1]
 print(value)
 ```
 
@@ -392,6 +444,25 @@ expensive_products <- products[products$Price >= "500", ]
 print(expensive_products)
 ```
 
+##### Explanation:
+
+The first issue is that we are trying to compare string value with a numeric value. When this happens the numeric value gets converted into a string and gets compared lexicographically. This will not always give the desired result, for example `1200` gets converted into `"1200"` and then gets compared with `"500"`. Since `"1"` is smaller than `"5"` it will not add it. Another issue is that we want to get prices above 500 but we are also including 500 which is not what we want.
+
+##### Corrected Code:
+
+```{r}
+products <- data.frame(
+  ProductID = c(201, 202, 203, 204, 205),
+  ProductName = c("Laptop", "Smartphone", "Tablet", "Headphones", "Smartwatch"),
+  Category = c("Electronics", "Electronics", "Electronics", "Accessories", "Electronics"),
+  Price = c(1200, 800, 600, 200, 350),
+  QuantitySold = c(150, 200, 300, 400, 250)
+)
+# Extracting products with a price above 500
+expensive_products <- products[products$Price > 500, ]
+print(expensive_products)
+```
+
 ------------------------------------------------------------------------
 
 ## 6. Analysis of the "trees" Dataset
@@ -407,7 +478,7 @@ This dataset has three variables (Girth, Height, Volume) on 31 felled black cher
 ### (b)
 
 -   Convert each Girth (diameter) to a radius $r$.
--   Calculate the cross-sectional area of each tree using \$3.14 \\times r\$^2^.
+-   Calculate the cross-sectional area of each tree using $3.14 \times r$ ^2^.
 -   Calculate and output the interquartile range (IQR) of the areas.
 
 ### (c)
