@@ -19,8 +19,8 @@ output: pdf_document
 # TODO: add information about assignment and libraries used
 #     - make sure to double check and double read each question
 #     - format code ctr + shift + a
-#     - test all code to make sure its still working
-#     - use sumaryfunction for dataframes where applicable
+#     - test all code to make sure its still working 
+#     - clear all comments
 
 ```
 
@@ -366,7 +366,6 @@ category_revenue(products)
 ### (e) Create a bar chart to display the total revenue for each product, and use different colors for each category.
 
 ```{r}
-# Create a list with categories as names and colors as values
 categories <- unique(products$Category)
 numCat <- length(categories)
 colours <- rainbow(numCat)
@@ -395,6 +394,9 @@ legend("topright",
 plot(
   products$Price,
   products$QuantitySold,
+  main = "Product Price Compared to Quantity Sold",
+  ylab = "Quantity Sold",
+  xlab = "Product Price",
   col = sapply(products$Category, function(col)
     colourList[[col]])
 )
@@ -409,7 +411,7 @@ legend("topright",
 
 between price and quantity sold from the scatter plot.
 
-Laptop's and Tablets tied for the highest revenues, both at 180000, followed by Smartphone's at 160000, after that Smart watch's at 87500 and lastly Headphones with 80000. From this data we can see that the highest earner for accessories still made less than the lowest earner for electronics. This was also a contributing factor to the revenues of electronics as a whole being a lot higher than accessories, although it is important to note that there were a lot more electronic products than accessories. Based on the scatter plot we can conclude that the higher priced a product is the fewer number of units are going to be sold. As a general note, the more expensive products also generated more revenues. 
+Laptop's and Tablets tied for the highest revenues, both at 180000, followed by Smartphone's at 160000, after that Smart watch's at 87500 and lastly Headphones with 80000. From this data we can see that the highest earner for accessories still made less than the lowest earner for electronics. This was also a contributing factor to the revenues of electronics as a whole being a lot higher than accessories, although it is important to note that there were a lot more electronic products than accessories. Based on the scatter plot we can conclude that the higher priced a product is the fewer number of units are going to be sold. As a general note, the more expensive products also generated more revenues.
 
 ------------------------------------------------------------------------
 
@@ -551,6 +553,7 @@ treesBiggerMean
 trees$Girth <- trees$Girth / 2
 
 crossSecArea <- (pi * trees$Girth ** 2)
+crossSecArea
 
 IQRCSA <- IQR(crossSecArea)
 IQRCSA 
@@ -562,7 +565,10 @@ IQRCSA
 -   Title and label the axes.
 
 ```{r}
-# TODO: sdfdmlsd
+hist(crossSecArea,
+     main = "Cross Section Area of Trees",
+     ylab = "Amount of Trees in Range",
+     xlab = "Cross Section Area",)
 ```
 
 ### (d)
@@ -571,7 +577,20 @@ IQRCSA
 -   Output its row number and the three measurements (Girth, Height, Volume) on one line
 
 ```{r}
-# TODO: sdfdmlsd
+maxIndex <- which.max(crossSecArea)
+print(
+  paste0(
+    "The tree with the larges area is at index ",
+    maxIndex,
+    ". With a Girth of ",
+    trees[maxIndex, ]$Girth,
+    ", Height of ",
+    trees[maxIndex, ]$Height,
+    "and a Volume of, ",
+    trees[maxIndex, ]$Volume,
+    "."
+  )
+)
 ```
 
 ------------------------------------------------------------------------
@@ -630,5 +649,34 @@ filtered_cars
 -   Write a detailed analysis (6-8 sentences) interpreting the relationship between horsepower and efficiency, considering the number of cylinders.
 
 ```{r}
-# TODO: sdfdmlsd
+
+allCars <- mtcars
+allCars$Efficiency <- efficiency_score(allCars)
+
+difCyl <- unique(allCars$cyl)
+numCyl <- length(difCyl)
+colours <- rainbow(numCyl)
+
+colourList <- list()
+for (i in 1:numCyl) {
+  colourList[[difCyl[i]]] <- colours[i]
+}
+
+plot(
+  allCars$hp,
+  allCars$Efficiency,
+  main = "Power Compared to Efficiency",
+  ylab = "Efficiency",
+  xlab = "Horse Power",
+  col = sapply(allCars$cyl, function(col)
+    colourList[[col]])
+)
+abline(lm(allCars$Efficiency ~  allCars$hp), col = "Black")
+
+legend("topright",
+       legend = difCyl,
+       fill = colours)
+
 ```
+
+We can see that as the power is increased, the efficiency is also decreased. This is more apparent with trend line. We can also see that the more cylinders a car has the more power it can produce. Another thing is that .the bigger engines (6 and 8 cylinders) don't loose much efficiency with a power increase. This also means that the lower powered variants of each variation will be less efficient and less powerful than powerful engines from engines that have two less cylinders. In conclusion, if you want power go for a 8cyl, if you want to save on gas go for a 4cyl and if you want something in the middle go for a 6cyl
