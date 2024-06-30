@@ -5,7 +5,27 @@ date: "`r Sys.Date()`"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Assignment 2
+
+## Name: Ariz Kazani
+
+## Student ID: 101311311
+
+------------------------------------------------------------------------
+
+# Notes
+
+```{r}
+# TODO: add information about assignment and libraries used
+#     - make sure to double check and double read each question
+#     - format code ctr + shift + a
+#     - test all code to make sure its still working 
+#     - clear all comments
+
 ```
 
+------------------------------------------------------------------------
+
+# Solutions
+
+------------------------------------------------------------------------
