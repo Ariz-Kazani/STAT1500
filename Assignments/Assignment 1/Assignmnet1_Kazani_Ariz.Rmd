@@ -15,7 +15,7 @@ output: pdf_document
 
 # Notes
 
-```{r}
+```{r} 
 # libraries:
 library(rmarkdown)
 ```

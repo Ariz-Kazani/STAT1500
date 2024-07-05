@@ -16,11 +16,10 @@ output: pdf_document
 # Notes
 
 ```{r}
-# TODO: add information about assignment and libraries used
-#     - make sure to double check and double read each question
-#     - format code ctr + shift + a
-#     - test all code to make sure its still working 
-#     - clear all comments
+# TODO:
+# - Format ctrl + shift + a
+# Make sure all questions are completed
+# double check questions
 
 ```
 
@@ -29,3 +28,219 @@ output: pdf_document
 # Solutions
 
 ------------------------------------------------------------------------
+
+## 1. Advanced ggplot2 Visualizations
+
+### A. Load the diamonds dataset from the ggplot2 package. Create a scatter plot of carat vs price with points colored by clarity.
+
+```{r}
+# TODO: Finish this question
+```
+
+### B. Modify the scatter plot to include a smoothing line (e.g., LOESS) and customize the theme for better readability.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### C. Create a boxplot of price by cut, with different fill colors for each cut.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### D. Combine the scatter plot and boxplot into a single visualization using patchwork.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+------------------------------------------------------------------------
+
+## 2. Advanced Group Manipulations
+
+### A. Load the mtcars dataset. Group the data by the number of cylinders and calculate the mean mpg for each group.
+
+```{r}
+# TODO: Finish this question
+```
+
+### B. Add a column to the original dataset indicating whether each car's mpg is above or below the mean mpg of its cylinder group.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### C. Create a summary table showing the mean and median hp and wt for each combination of cyl and gear.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### D. Write a function to calculate the coefficient of variation (CV) for a given numeric column and apply this function to mpg, hp, and wt for each cylinder group.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### E. Plot the mean mpg and CV of mpg for each cylinder group using a bar plot with error bars.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+------------------------------------------------------------------------
+
+## 3. Data Reshaping with tidyr
+
+### A. Load the airquality dataset. Reshape the dataset from wide to long format, using gather() for the measurements (Ozone, Solar.R, Wind, Temp).
+
+```{r}
+# TODO: Finish this question
+```
+
+### B. Reshape the dataset back to wide format using spread().
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### C. Use separate() to split the Month column into Month and Day columns (if it were combined), and then recombine them using unite().
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### D. Create a summary table showing the average values for each variable by month.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+------------------------------------------------------------------------
+
+## 4. Introduction to Probability
+
+### A. Simulate rolling a fair six-sided die 1000 times. Calculate the empirical probability of each outcome.
+
+```{r}
+# TODO: Finish this question
+```
+
+### B. Simulate drawing a card from a standard deck of 52 cards 1000 times. Calculate the empirical probability of drawing an Ace.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### C. Use the binomial distribution to calculate the probability of getting exactly 5 heads in 10 flips of a fair coin. Repeat for getting 5 or more heads.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### D. Generate a plot showing the probability mass function (PMF) of a binomial distribution with parameters n = 10 and p = 0.5.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+------------------------------------------------------------------------
+
+## 5. Advanced Data Manipulation and Visualization
+
+### A. Load the iris dataset and create a summary table showing the mean, median, and standard deviation of each
+
+numerical variable grouped by Species.
+
+```{r}
+# TODO: Finish this question
+```
+
+### B. Create a pairwise scatter plot matrix using the pairs() function for the iris dataset colored by Species.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### C. Use ggplot2 to create a violin plot for Petal.Length grouped by Species.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### D. Create a heatmap of the correlation matrix for the numerical variables in the iris dataset.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### E. Write a short analysis (5-7 sentences) interpreting the results from the summary table, scatter plot matrix, violin plot, and heatmap.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+------------------------------------------------------------------------
+
+## 6. Data Reshaping and Aggregation
+
+### A. Load the gapminder dataset from the gapminder package. Reshape the dataset to long format, focusing on the variables year and gdpPercap.
+
+```{r}
+# TODO: Finish this question
+```
+
+### B. Aggregate the data to calculate the average gdpPercap by continent and year.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### C. Create a line plot of the average gdpPercap over time for each continent.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### D. Create a faceted plot showing gdpPercap distributions by continent for the most recent year in the dataset.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### E. Write a detailed report (6-8 sentences) analyzing the trends and patterns observed in the plots.
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+------------------------------------------------------------------------
+
+## 7. Probability
+
+### A local fraternity is conducting a raffle where 50 tickets are to be sold, one per customer. There are three prizes to be awarded. If the four organizers of the raffle each buy one ticket, what is the probability that the four organizers win
+
+### A. all of the prizes?
+
+```{r}
+# TODO: Finish this question
+```
+
+### B. exactly two of the prizes?
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### C. exactly one of the prizes?
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
+
+### D. none of the prizes?
+
+```{r}
+# TODO: add information about assignment and libraries used
+```
