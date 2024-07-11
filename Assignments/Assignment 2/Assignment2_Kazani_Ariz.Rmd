@@ -20,7 +20,7 @@ output: pdf_document
 # - Format ctrl + shift + a
 # Make sure all questions are completed
 # double check questions
-
+# install.packages("ggplot2")
 ```
 
 ------------------------------------------------------------------------
