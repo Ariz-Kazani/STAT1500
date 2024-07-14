@@ -17,7 +17,10 @@ output: pdf_document
 
 ```{r eval=FALSE}
 # Libraries
+install.packages("rmarkdown")
 library(rmarkdown)
+install.packages("ggplot2")
+library(ggplot2)
 
 # TODO:
 # - Format ctrl + shift + a
@@ -37,7 +40,8 @@ library(rmarkdown)
 ### A. Load the diamonds dataset from the ggplot2 package. Create a scatter plot of carat vs price with points colored by clarity.
 
 ```{r}
-# TODO: Finish this question
+diamondDS <- diamonds
+ggplot(diamondDS, aes(x=carat, y=price, colour=clarity)) + geom_point()
 ```
 
 ### B. Modify the scatter plot to include a smoothing line (e.g., LOESS) and customize the theme for better readability.
