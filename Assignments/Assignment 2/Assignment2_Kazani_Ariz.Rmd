@@ -15,12 +15,14 @@ output: pdf_document
 
 # Notes
 
-```{r eval=FALSE}
+```{r}
 # Libraries
-install.packages("rmarkdown")
+#install.packages("rmarkdown")
 library(rmarkdown)
-install.packages("ggplot2")
+#install.packages("ggplot2")
 library(ggplot2)
+#install.packages("patchwork")
+library(patchwork)
 
 # TODO:
 # - Format ctrl + shift + a
@@ -39,29 +41,31 @@ library(ggplot2)
 
 ### A. Load the diamonds dataset from the ggplot2 package. Create a scatter plot of carat vs price with points colored by clarity.
 
-```{r}
-diamondDS <- diamonds
-plot <- ggplot(diamondDS, aes(x=carat, y=price, colour=clarity)) + geom_point() + labs(x="Price", y="Carat", title = "Carat VS Price of Diamonds", colour = "Clarity") 
-plot
+```{r, echo=FALSE}
+data("diamonds")
+scatPlot <- ggplot(diamonds, aes(x=carat, y=price, colour=clarity)) + geom_point() + labs(x="Carat", y="Price", title = "Carat VS Price of Diamonds", colour = "Clarity") 
+scatPlot
 ```
 
 ### B. Modify the scatter plot to include a smoothing line (e.g., LOESS) and customize the theme for better readability.
 
 ```{r}
-plot <- plot + geom_smooth(fill=NA, method="loess") + theme_classic()
-plot
+scatPlot <- scatPlot + geom_smooth(fill=NA, method="loess") + theme_classic()
+scatPlot 
 ```
 
 ### C. Create a boxplot of price by cut, with different fill colors for each cut.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+boxPlot <- ggplot(diamonds, aes(x=cut, y=price, colour = cut)) + geom_boxplot(alpha=0.3)  + labs(x="Cut", y="Price", title = "Cut VS Price of Diamonds") 
+boxPlot
 ```
 
 ### D. Combine the scatter plot and boxplot into a single visualization using patchwork.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+combinedPlot <- scatPlot / boxPlot
+combinedPlot
 ```
 
 ------------------------------------------------------------------------
