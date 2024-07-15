@@ -41,13 +41,15 @@ library(ggplot2)
 
 ```{r}
 diamondDS <- diamonds
-ggplot(diamondDS, aes(x=carat, y=price, colour=clarity)) + geom_point()
+plot <- ggplot(diamondDS, aes(x=carat, y=price, colour=clarity)) + geom_point() + labs(x="Price", y="Carat", title = "Carat VS Price of Diamonds", colour = "Clarity") 
+plot
 ```
 
 ### B. Modify the scatter plot to include a smoothing line (e.g., LOESS) and customize the theme for better readability.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+plot <- plot + geom_smooth(fill=NA, method="loess") + theme_classic()
+plot
 ```
 
 ### C. Create a boxplot of price by cut, with different fill colors for each cut.
