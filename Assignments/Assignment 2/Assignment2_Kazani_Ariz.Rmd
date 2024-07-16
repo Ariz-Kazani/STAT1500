@@ -81,7 +81,8 @@ scatPlot
 ```{r}
 boxPlot <- ggplot(diamonds, aes(x = cut, y = price, colour = cut)) +
   geom_boxplot(alpha = 0.3) +
-  labs(x = "Cut", y = "Price", title = "Cut VS Price of Diamonds")
+  labs(x = "Cut", y = "Price", title = "Cut VS Price of Diamonds") +
+  theme_classic()
 
 boxPlot
 ```
@@ -161,7 +162,8 @@ plotData <- mtcars %>%
 ggplot(plotData, aes(x = factor(cyl), y = meanMpg)) +
   geom_bar(stat = "identity") +
   geom_errorbar(aes(ymin = meanMpg - cvMpg, ymax = meanMpg + cvMpg), ) +
-  labs(x = "Number of Cylinders", y = "Mean MPG", title = "Mean MPG and CV of MPG")
+  labs(x = "Number of Cylinders", y = "Mean MPG", title = "Mean MPG and CV of MPG") +
+  theme_classic()
 ```
 
 ------------------------------------------------------------------------
@@ -222,55 +224,119 @@ aqdSummary
 ### A. Simulate rolling a fair six-sided die 1000 times. Calculate the empirical probability of each outcome.
 
 ```{r}
-# TODO: Finish this question
+
+simulateDiceRole <- function(n) {
+  outcome <- sample(1:6, n, replace = TRUE)
+  return(outcome)
+}
+
+outcome <- simulateDiceRole(1000)
+
+outcome
+
+EP <- table(outcome) / 1000 
+
+EP
 ```
 
 ### B. Simulate drawing a card from a standard deck of 52 cards 1000 times. Calculate the empirical probability of drawing an Ace.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+# lets assume each suit goes from ace to king, 1-13 respectivly
+simulateCardDraw <- function(n) {
+  outcome <- sample(1:52, n, replace = TRUE)
+  return(outcome)
+}
+
+
+outcome <- simulateCardDraw(1000)
+
+outcome
+
+#find the card value, from 1-13
+outcome <- ifelse(outcome %% 13 == 0, 13, outcome %% 13) 
+
+EP <- sum(outcome == 1) /1000
+
+cat("Empirical probability of drawing an Ace:", EP)
+
 ```
 
 ### C. Use the binomial distribution to calculate the probability of getting exactly 5 heads in 10 flips of a fair coin. Repeat for getting 5 or more heads.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+prob5Heads <- dbinom(x=5, size=10, prob=0.5)
+cat("The probability of getting exactly 5 heads in 10 flips of a fair coin is:", prob5Heads, "\n")
+prob5MoreHeads <- pbinom(4, size = 10, prob = 0.5, lower.tail = FALSE)
+cat("The probability of 5 or more heads in 10 flips of a fair coin is:", prob5MoreHeads, "\n" )
 ```
 
 ### D. Generate a plot showing the probability mass function (PMF) of a binomial distribution with parameters n = 10 and p = 0.5.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+x <- 0:10
+
+pmf <- dbinom(x = x, size = 10, prob = 0.5)
+
+df <- data.frame(x, pmf)
+
+ggplot(df, aes(x = x, y = pmf)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Probability Mass Function of Binomial Distribution", x = "Number of Successes", y = "Probability") +
+  theme_classic()
+
 ```
 
 ------------------------------------------------------------------------
 
 ## 5. Advanced Data Manipulation and Visualization
 
-### A. Load the iris dataset and create a summary table showing the mean, median, and standard deviation of each
-
-numerical variable grouped by Species.
+### A. Load the iris dataset and create a summary table showing the mean, median, and standard deviation of each numerical variable grouped by Species.
 
 ```{r}
-# TODO: Finish this question
+data(iris)
+irisData <- iris
+irisData <- irisData %>% group_by(Species) %>% summarise(
+  meanSepal.Length = mean(Sepal.Length),
+  medianSepal.Length = median(Sepal.Length),
+  sdSepal.Length = sd(Sepal.Length),
+  
+  meanSepal.Width = mean(Sepal.Width),
+  medianSepal.Width = median(Sepal.Width),
+  sdSepal.Width = sd(Sepal.Width),
+  
+  meanPetal.Length = mean(Petal.Length),
+  medianPetal.Length = median(Petal.Length),
+  sdPetal.Length = sd(Petal.Length),
+  
+  meanPetal.Width = mean(Petal.Width),
+  medianPetal.Width = median(Petal.Width),
+  sdPetal.Width = sd(Petal.Width),
+)
+
+irisData
 ```
 
 ### B. Create a pairwise scatter plot matrix using the pairs() function for the iris dataset colored by Species.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+colours <- rainbow(length(unique(iris$Species)))
+pairs(iris[1:4], pch = 19, col = colours[iris$Species])
 ```
 
 ### C. Use ggplot2 to create a violin plot for Petal.Length grouped by Species.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+ggplot(iris, aes(x = Species, y = Petal.Length, fill = Species)) +
+  geom_violin() +
+  labs(title = "Violin Plot of Petal Length by Species") + 
+  theme_classic()
 ```
 
 ### D. Create a heatmap of the correlation matrix for the numerical variables in the iris dataset.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+cor_matrix_iris <- cor(iris[, 1:4])
 ```
 
 ### E. Write a short analysis (5-7 sentences) interpreting the results from the summary table, scatter plot matrix, violin plot, and heatmap.
