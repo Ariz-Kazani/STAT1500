@@ -16,13 +16,24 @@ output: pdf_document
 # Notes
 
 ```{r}
+
 # Libraries
+
+# NOTE: if you do not have any of the below libraries installed, un-comment the line and run it
 #install.packages("rmarkdown")
 library(rmarkdown)
+
 #install.packages("ggplot2")
 library(ggplot2)
+
 #install.packages("patchwork")
 library(patchwork)
+
+#install.packages("dplyr")
+library(dplyr)
+
+# install.packages("tidyr")
+library(tidyr)
 
 # TODO:
 # - Format ctrl + shift + a
@@ -43,21 +54,35 @@ library(patchwork)
 
 ```{r, echo=FALSE}
 data("diamonds")
-scatPlot <- ggplot(diamonds, aes(x=carat, y=price, colour=clarity)) + geom_point() + labs(x="Carat", y="Price", title = "Carat VS Price of Diamonds", colour = "Clarity") 
+scatPlot <- ggplot(diamonds, aes(x = carat, y = price, colour = clarity)) +
+  geom_point() +
+  labs(
+    x = "Carat",
+    y = "Price",
+    title = "Carat VS Price of Diamonds",
+    colour = "Clarity"
+  )
+
 scatPlot
 ```
 
 ### B. Modify the scatter plot to include a smoothing line (e.g., LOESS) and customize the theme for better readability.
 
 ```{r}
-scatPlot <- scatPlot + geom_smooth(fill=NA, method="loess") + theme_classic()
+scatPlot <- scatPlot +
+  geom_smooth(fill = NA, method = "loess") +
+  theme_classic()
+
 scatPlot 
 ```
 
 ### C. Create a boxplot of price by cut, with different fill colors for each cut.
 
 ```{r}
-boxPlot <- ggplot(diamonds, aes(x=cut, y=price, colour = cut)) + geom_boxplot(alpha=0.3)  + labs(x="Cut", y="Price", title = "Cut VS Price of Diamonds") 
+boxPlot <- ggplot(diamonds, aes(x = cut, y = price, colour = cut)) +
+  geom_boxplot(alpha = 0.3) +
+  labs(x = "Cut", y = "Price", title = "Cut VS Price of Diamonds")
+
 boxPlot
 ```
 
@@ -75,31 +100,68 @@ combinedPlot
 ### A. Load the mtcars dataset. Group the data by the number of cylinders and calculate the mean mpg for each group.
 
 ```{r}
-# TODO: Finish this question
+data("mtcars")
+
+mtcarsDS <- mtcars
+
+meanMpg <- tapply(mtcarsDS$mpg, mtcarsDS$cyl, mean)
+
+meanMpg
 ```
 
 ### B. Add a column to the original dataset indicating whether each car's mpg is above or below the mean mpg of its cylinder group.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+mtcarsDS$posMean <- ifelse(mtcarsDS$mpg > meanMpg[as.character(mtcarsDS$cyl)],
+                           "above",
+                           ifelse(mtcarsDS$mpg < meanMpg[as.character(mtcarsDS$cyl)], "below", "same"))
+
+mtcarsDS
 ```
 
 ### C. Create a summary table showing the mean and median hp and wt for each combination of cyl and gear.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+summaryTable <- mtcars %>%
+  group_by(cyl, gear) %>%
+  summarise(
+    meanHp = mean(hp),
+    medianHp = median(hp),
+    meanWt = mean(wt),
+    medianWt = median(wt),
+  )
+
+summaryTable
 ```
 
 ### D. Write a function to calculate the coefficient of variation (CV) for a given numeric column and apply this function to mpg, hp, and wt for each cylinder group.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+getCV <- function(x) {
+  cv <- sd(x) / mean(x) * 100
+  return(cv)
+}
+
+cvs <- mtcars %>%
+  group_by(cyl) %>%
+  summarise(cvMpg = getCV(mpg),
+            cvHp = getCV(hp),
+            cvWt = getCV(wt))
+
+cvs
 ```
 
 ### E. Plot the mean mpg and CV of mpg for each cylinder group using a bar plot with error bars.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+plotData <- mtcars %>%
+  group_by(cyl) %>%
+  summarise(meanMpg = mean(mpg), cvMpg = getCV(mpg))
+
+ggplot(plotData, aes(x = factor(cyl), y = meanMpg)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin = meanMpg - cvMpg, ymax = meanMpg + cvMpg), ) +
+  labs(x = "Number of Cylinders", y = "Mean MPG", title = "Mean MPG and CV of MPG")
 ```
 
 ------------------------------------------------------------------------
