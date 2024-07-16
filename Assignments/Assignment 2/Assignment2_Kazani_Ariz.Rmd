@@ -52,7 +52,7 @@ library(tidyr)
 
 ### A. Load the diamonds dataset from the ggplot2 package. Create a scatter plot of carat vs price with points colored by clarity.
 
-```{r, echo=FALSE}
+```{r}
 data("diamonds")
 scatPlot <- ggplot(diamonds, aes(x = carat, y = price, colour = clarity)) +
   geom_point() +
@@ -116,7 +116,7 @@ mtcarsDS$posMean <- ifelse(mtcarsDS$mpg > meanMpg[as.character(mtcarsDS$cyl)],
                            "above",
                            ifelse(mtcarsDS$mpg < meanMpg[as.character(mtcarsDS$cyl)], "below", "same"))
 
-mtcarsDS
+head(mtcarsDS)
 ```
 
 ### C. Create a summary table showing the mean and median hp and wt for each combination of cyl and gear.
@@ -175,7 +175,7 @@ data("airquality")
 airqualityData <- airquality
 airqualityData <- airqualityData %>% gather(key = "variable", value = "value", Ozone:Temp)
 
-airqualityData
+head(airqualityData)
 ```
 
 ### B. Reshape the dataset back to wide format using spread().
@@ -183,7 +183,7 @@ airqualityData
 ```{r}
 airqualityData <- airqualityData %>% spread(key = variable, value = value)
 
-airqualityData
+head(airqualityData)
 ```
 
 ### C. Use separate() to split the Month column into Month and Day columns (if it were combined), and then recombine them using unite().
@@ -194,8 +194,7 @@ airqualityData
 
 airqualityData <- airqualityData %>% unite("Date", Month, Day, sep = "-")
 
-airqualityData
-
+head(airqualityData)
 ```
 
 ### D. Create a summary table showing the average values for each variable by month.
