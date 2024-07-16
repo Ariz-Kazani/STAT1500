@@ -16,24 +16,26 @@ output: pdf_document
 # Notes
 
 ```{r}
-
 # Libraries
 
 # NOTE: if you do not have any of the below libraries installed, un-comment the line and run it
-#install.packages("rmarkdown")
+# install.packages("rmarkdown")
 library(rmarkdown)
 
-#install.packages("ggplot2")
+# install.packages("ggplot2")
 library(ggplot2)
 
-#install.packages("patchwork")
+# install.packages("patchwork")
 library(patchwork)
 
-#install.packages("dplyr")
+# install.packages("dplyr")
 library(dplyr)
 
 # install.packages("tidyr")
 library(tidyr)
+
+# install.packages("gapminder")
+library(gapminder)
 
 # TODO:
 # - Format ctrl + shift + a
@@ -336,14 +338,14 @@ ggplot(iris, aes(x = Species, y = Petal.Length, fill = Species)) +
 ### D. Create a heatmap of the correlation matrix for the numerical variables in the iris dataset.
 
 ```{r}
-cor_matrix_iris <- cor(iris[, 1:4])
+correlationMatrix <- cor(iris[, 1:4])
+
+heatmap(correlationMatrix, symm = TRUE, labCol = c("SL", "SW", "PL", "PW"))
 ```
 
 ### E. Write a short analysis (5-7 sentences) interpreting the results from the summary table, scatter plot matrix, violin plot, and heatmap.
 
-```{r}
-# TODO: add information about assignment and libraries used
-```
+For all three species we can see that the mean and median sepal and petal length and width are similar, indicating a normal distribution. The virginica has the highest mean sepal length and the setosa has the smallest with the revers being true for the length. The petal for the petal length and width the virginica is the highest, followed by versicolor,and lastly setosa. The pairwise plot simple confirst the observations we saw with the data for the sepal and petal lengths, it also provides a clearer view of some of the points, we can see the the virginica and versicolor's points are close to one another and overlap with the setosa being clearly further apart. From the violin plot we can see that the setosa has a very normal distribution where versicolor and virginica are slightly skewed left and right respectively. From the heat map we can see that there is a very strong coralation between Petal Length and Petal Width and a moderate coralation between Sepal Length and Petal length and Petal width. There is also a very small coralation between Sepal Length and Width.
 
 ------------------------------------------------------------------------
 
@@ -352,32 +354,58 @@ cor_matrix_iris <- cor(iris[, 1:4])
 ### A. Load the gapminder dataset from the gapminder package. Reshape the dataset to long format, focusing on the variables year and gdpPercap.
 
 ```{r}
-# TODO: Finish this question
+data(gapminder)
+
+gapminderDS <- gapminder
+
+
+gapminderDS <- gapminderDS %>%
+  gather(key = "variable", value = "value", year, gdpPercap)
+
+head(gapminderDS)
 ```
 
 ### B. Aggregate the data to calculate the average gdpPercap by continent and year.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+avgGDP<- gapminder %>%
+  group_by(continent, year) %>%
+  summarize(avgGDPpc = mean(gdpPercap, na.rm = TRUE))
+
+head(avgGDP)
 ```
 
 ### C. Create a line plot of the average gdpPercap over time for each continent.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+ggplot(avgGDP, aes(x = year, y = avgGDPpc, color = continent)) +
+  geom_line() +
+  labs(
+    title = "Average GDP per Capita Over Time",
+    x = "Year",
+    y = "Average GDP per Capita",
+    color = "Continent"
+  ) +
+  theme_classic()
 ```
 
 ### D. Create a faceted plot showing gdpPercap distributions by continent for the most recent year in the dataset.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+maxYear <- max(gapminder$year)
+gapminderDS <- gapminder %>%
+  filter(year == most_recent_year)
+
+ggplot(gapminderDS, aes(x = gdpPercap, fill = continent)) +
+  geom_histogram(binwidth = 1000) +
+  facet_grid(continent ~ .) +
+  labs(x = "GDP per Capita", y = "Frequency", 
+       title = paste("GDP per Capita Distribution by Continent"))
 ```
 
 ### E. Write a detailed report (6-8 sentences) analyzing the trends and patterns observed in the plots.
 
-```{r}
-# TODO: add information about assignment and libraries used
-```
+From the data we can see that as the years increase the life expectancy and GDP increase. We can also see that Africa's GDP per capita has not increased much and Eurome, and Asia's increased a Lot. Africas GDP per capita is very low for all the countries. The Americas, Asia and Europe have very spread out. Europe has the highest country with GDP per capita. Ocianas lowest GDP per capita is higher than Africas highest GDP per capita. The GDP of the Americas and Asia is comparable. 
 
 ------------------------------------------------------------------------
 
