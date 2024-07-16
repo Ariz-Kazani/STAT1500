@@ -171,25 +171,49 @@ ggplot(plotData, aes(x = factor(cyl), y = meanMpg)) +
 ### A. Load the airquality dataset. Reshape the dataset from wide to long format, using gather() for the measurements (Ozone, Solar.R, Wind, Temp).
 
 ```{r}
-# TODO: Finish this question
+data("airquality")
+airqualityData <- airquality
+airqualityData <- airqualityData %>% gather(key = "variable", value = "value", Ozone:Temp)
+
+airqualityData
 ```
 
 ### B. Reshape the dataset back to wide format using spread().
 
 ```{r}
-# TODO: add information about assignment and libraries used
+airqualityData <- airqualityData %>% spread(key = variable, value = value)
+
+airqualityData
 ```
 
 ### C. Use separate() to split the Month column into Month and Day columns (if it were combined), and then recombine them using unite().
 
 ```{r}
-# TODO: add information about assignment and libraries used
+# since its not combine the following code is commented out
+# airqualityData <- airqualityData %>% separate(Date, c("Month", "Day"), sep="-")
+
+airqualityData <- airqualityData %>% unite("Date", Month, Day, sep = "-")
+
+airqualityData
+
 ```
 
 ### D. Create a summary table showing the average values for each variable by month.
 
 ```{r}
-# TODO: add information about assignment and libraries used
+airqualityData <- airqualityData %>% separate(Date, c("Month", "Day"), sep =
+                                                "-")
+
+aqdSummary <- airqualityData %>%
+  group_by(Month) %>%
+  summarise(
+    meanOzone = mean(Ozone , na.rm = TRUE),
+    meanSolar.R = mean(Solar.R , na.rm = TRUE),
+    meanTemp = mean(Temp , na.rm = TRUE),
+    meanWind = mean(Wind , na.rm = TRUE),
+  )
+
+aqdSummary
 ```
 
 ------------------------------------------------------------------------
