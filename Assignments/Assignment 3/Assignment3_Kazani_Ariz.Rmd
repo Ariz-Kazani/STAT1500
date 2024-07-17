@@ -1,0 +1,54 @@
+---
+title: "Assignment 3"
+author: "Ariz Kazani"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+# Assignment 3
+
+## Name: Ariz Kazani
+
+## Student ID: 101311311
+
+------------------------------------------------------------------------
+
+# Notes
+
+```{r}
+# Libraries
+
+# NOTE: if you do not have any of the below libraries installed, un-comment the line and run it
+# install.packages("rmarkdown")
+library(rmarkdown)
+
+# install.packages("ggplot2")
+library(ggplot2)
+
+# install.packages("patchwork")
+library(patchwork)
+
+# install.packages("dplyr")
+library(dplyr)
+
+# install.packages("tidyr")
+library(tidyr)
+
+# install.packages("gapminder")
+library(gapminder)
+```
+
+------------------------------------------------------------------------
+
+# Solutions
+
+------------------------------------------------------------------------
+
+## 1. 
+
+### A.
+
+```{r}
+# TODO:
+```
+
