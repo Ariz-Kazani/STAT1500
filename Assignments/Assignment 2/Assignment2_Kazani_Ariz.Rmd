@@ -5,7 +5,465 @@ date: "`r Sys.Date()`"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Assignment 2
+
+## Name: Ariz Kazani
+
+## Student ID: 101311311
+
+------------------------------------------------------------------------
+
+# Notes
+
+```{r}
+# Libraries
+
+# NOTE: if you do not have any of the below libraries installed, un-comment the line and run it
+# install.packages("rmarkdown")
+library(rmarkdown)
+
+# install.packages("ggplot2")
+library(ggplot2)
+
+# install.packages("patchwork")
+library(patchwork)
+
+# install.packages("dplyr")
+library(dplyr)
+
+# install.packages("tidyr")
+library(tidyr)
+
+# install.packages("gapminder")
+library(gapminder)
 ```
 
+------------------------------------------------------------------------
+
+# Solutions
+
+------------------------------------------------------------------------
+
+## 1. Advanced ggplot2 Visualizations
+
+### A. Load the diamonds dataset from the ggplot2 package. Create a scatter plot of carat vs price with points colored by clarity.
+
+```{r}
+data("diamonds")
+scatPlot <- ggplot(diamonds, aes(x = carat, y = price, colour = clarity)) +
+  geom_point() +
+  labs(
+    x = "Carat",
+    y = "Price",
+    title = "Carat VS Price of Diamonds",
+    colour = "Clarity"
+  )
+
+scatPlot
+```
+
+### B. Modify the scatter plot to include a smoothing line (e.g., LOESS) and customize the theme for better readability.
+
+```{r}
+scatPlot <- scatPlot +
+  geom_smooth(fill = NA, method = "loess") +
+  theme_classic()
+
+scatPlot 
+```
+
+### C. Create a boxplot of price by cut, with different fill colors for each cut.
+
+```{r}
+boxPlot <- ggplot(diamonds, aes(x = cut, y = price, colour = cut)) +
+  geom_boxplot(alpha = 0.3) +
+  labs(x = "Cut", y = "Price", title = "Cut VS Price of Diamonds") +
+  theme_classic()
+
+boxPlot
+```
+
+### D. Combine the scatter plot and boxplot into a single visualization using patchwork.
+
+```{r}
+combinedPlot <- scatPlot / boxPlot
+combinedPlot
+```
+
+------------------------------------------------------------------------
+
+## 2. Advanced Group Manipulations
+
+### A. Load the mtcars dataset. Group the data by the number of cylinders and calculate the mean mpg for each group.
+
+```{r}
+data("mtcars")
+
+mtcarsDS <- mtcars
+
+meanMpg <- tapply(mtcarsDS$mpg, mtcarsDS$cyl, mean)
+
+meanMpg
+```
+
+### B. Add a column to the original dataset indicating whether each car's mpg is above or below the mean mpg of its cylinder group.
+
+```{r}
+mtcarsDS$posMean <- ifelse(mtcarsDS$mpg > meanMpg[as.character(mtcarsDS$cyl)],
+                           "above",
+                           ifelse(mtcarsDS$mpg < meanMpg[as.character(mtcarsDS$cyl)], "below", "same"))
+
+head(mtcarsDS)
+```
+
+### C. Create a summary table showing the mean and median hp and wt for each combination of cyl and gear.
+
+```{r}
+summaryTable <- mtcars %>%
+  group_by(cyl, gear) %>%
+  summarise(
+    meanHp = mean(hp),
+    medianHp = median(hp),
+    meanWt = mean(wt),
+    medianWt = median(wt),
+  )
+
+summaryTable
+```
+
+### D. Write a function to calculate the coefficient of variation (CV) for a given numeric column and apply this function to mpg, hp, and wt for each cylinder group.
+
+```{r}
+getCV <- function(x) {
+  cv <- sd(x) / mean(x) * 100
+  return(cv)
+}
+
+cvs <- mtcars %>%
+  group_by(cyl) %>%
+  summarise(cvMpg = getCV(mpg),
+            cvHp = getCV(hp),
+            cvWt = getCV(wt))
+
+cvs
+```
+
+### E. Plot the mean mpg and CV of mpg for each cylinder group using a bar plot with error bars.
+
+```{r}
+plotData <- mtcars %>%
+  group_by(cyl) %>%
+  summarise(meanMpg = mean(mpg), cvMpg = getCV(mpg))
+
+ggplot(plotData, aes(x = factor(cyl), y = meanMpg)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin = meanMpg - cvMpg, ymax = meanMpg + cvMpg), ) +
+  labs(x = "Number of Cylinders", y = "Mean MPG", title = "Mean MPG and CV of MPG") +
+  theme_classic()
+```
+
+------------------------------------------------------------------------
+
+## 3. Data Reshaping with tidyr
+
+### A. Load the airquality dataset. Reshape the dataset from wide to long format, using gather() for the measurements (Ozone, Solar.R, Wind, Temp).
+
+```{r}
+data("airquality")
+airqualityData <- airquality
+airqualityData <- airqualityData %>% gather(key = "variable", value = "value", Ozone:Temp)
+
+head(airqualityData)
+```
+
+### B. Reshape the dataset back to wide format using spread().
+
+```{r}
+airqualityData <- airqualityData %>% spread(key = variable, value = value)
+
+head(airqualityData)
+```
+
+### C. Use separate() to split the Month column into Month and Day columns (if it were combined), and then recombine them using unite().
+
+```{r}
+# since its not combine the following code is commented out
+# airqualityData <- airqualityData %>% separate(Date, c("Month", "Day"), sep="-")
+
+airqualityData <- airqualityData %>% unite("Date", Month, Day, sep = "-")
+
+head(airqualityData)
+```
+
+### D. Create a summary table showing the average values for each variable by month.
+
+```{r}
+airqualityData <- airqualityData %>% separate(Date, c("Month", "Day"), sep =
+                                                "-")
+
+aqdSummary <- airqualityData %>%
+  group_by(Month) %>%
+  summarise(
+    meanOzone = mean(Ozone , na.rm = TRUE),
+    meanSolar.R = mean(Solar.R , na.rm = TRUE),
+    meanTemp = mean(Temp , na.rm = TRUE),
+    meanWind = mean(Wind , na.rm = TRUE),
+  )
+
+aqdSummary
+```
+
+------------------------------------------------------------------------
+
+## 4. Introduction to Probability
+
+### A. Simulate rolling a fair six-sided die 1000 times. Calculate the empirical probability of each outcome.
+
+```{r}
+simulateDiceRole <- function(n) {
+  outcome <- sample(1:6, n, replace = TRUE)
+  return(outcome)
+}
+
+outcome <- simulateDiceRole(1000)
+
+outcome
+
+EP <- table(outcome) / 1000
+
+EP
+```
+
+### B. Simulate drawing a card from a standard deck of 52 cards 1000 times. Calculate the empirical probability of drawing an Ace.
+
+```{r}
+# lets assume each suit goes from ace to king, 1-13 respectivly
+simulateCardDraw <- function(n) {
+  outcome <- sample(1:52, n, replace = TRUE)
+  return(outcome)
+}
+
+
+outcome <- simulateCardDraw(1000)
+
+outcome
+
+#find the card value, from 1-13
+outcome <- ifelse(outcome %% 13 == 0, 13, outcome %% 13)
+
+EP <- sum(outcome == 1) / 1000
+
+cat("Empirical probability of drawing an Ace:", EP)
+```
+
+### C. Use the binomial distribution to calculate the probability of getting exactly 5 heads in 10 flips of a fair coin. Repeat for getting 5 or more heads.
+
+```{r}
+prob5Heads <- dbinom(x = 5, size = 10, prob = 0.5)
+cat("The probability of getting exactly 5 heads in 10 flips of a fair coin is:",
+    prob5Heads,
+    "\n")
+prob5MoreHeads <- pbinom(4,
+                         size = 10,
+                         prob = 0.5,
+                         lower.tail = FALSE)
+cat("The probability of 5 or more heads in 10 flips of a fair coin is:",
+    prob5MoreHeads,
+    "\n")
+```
+
+### D. Generate a plot showing the probability mass function (PMF) of a binomial distribution with parameters n = 10 and p = 0.5.
+
+```{r}
+x <- 0:10
+
+pmf <- dbinom(x = x, size = 10, prob = 0.5)
+
+df <- data.frame(x, pmf)
+
+ggplot(df, aes(x = x, y = pmf)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Probability Mass Function of Binomial Distribution", x = "Number of Successes", y = "Probability") +
+  theme_classic()
+```
+
+------------------------------------------------------------------------
+
+## 5. Advanced Data Manipulation and Visualization
+
+### A. Load the iris dataset and create a summary table showing the mean, median, and standard deviation of each numerical variable grouped by Species.
+
+```{r}
+data(iris)
+irisData <- iris
+irisData <- irisData %>% group_by(Species) %>% summarise(
+  meanSepal.Length = mean(Sepal.Length),
+  medianSepal.Length = median(Sepal.Length),
+  sdSepal.Length = sd(Sepal.Length),
+  
+  meanSepal.Width = mean(Sepal.Width),
+  medianSepal.Width = median(Sepal.Width),
+  sdSepal.Width = sd(Sepal.Width),
+  
+  meanPetal.Length = mean(Petal.Length),
+  medianPetal.Length = median(Petal.Length),
+  sdPetal.Length = sd(Petal.Length),
+  
+  meanPetal.Width = mean(Petal.Width),
+  medianPetal.Width = median(Petal.Width),
+  sdPetal.Width = sd(Petal.Width),
+)
+
+irisData
+```
+
+### B. Create a pairwise scatter plot matrix using the pairs() function for the iris dataset colored by Species.
+
+```{r}
+colours <- rainbow(length(unique(iris$Species)))
+pairs(iris[1:4], pch = 19, col = colours[iris$Species])
+```
+
+### C. Use ggplot2 to create a violin plot for Petal.Length grouped by Species.
+
+```{r}
+ggplot(iris, aes(x = Species, y = Petal.Length, fill = Species)) +
+  geom_violin() +
+  labs(title = "Violin Plot of Petal Length by Species") +
+  theme_classic()
+```
+
+### D. Create a heatmap of the correlation matrix for the numerical variables in the iris dataset.
+
+```{r}
+correlationMatrix <- cor(iris[, 1:4])
+
+heatmap(correlationMatrix,
+        symm = TRUE,
+        labCol = c("SL", "SW", "PL", "PW"))
+```
+
+### E. Write a short analysis (5-7 sentences) interpreting the results from the summary table, scatter plot matrix, violin plot, and heatmap.
+
+For all three species we can see that the mean and median sepal and petal length and width are similar, indicating a normal distribution. The virginica has the highest mean sepal length and the setosa has the smallest with the revers being true for the length. The petal for the petal length and width the virginica is the highest, followed by versicolor,and lastly setosa. The pairwise plot simple confirst the observations we saw with the data for the sepal and petal lengths, it also provides a clearer view of some of the points, we can see the the virginica and versicolor's points are close to one another and overlap with the setosa being clearly further apart. From the violin plot we can see that the setosa has a very normal distribution where versicolor and virginica are slightly skewed left and right respectively. From the heat map we can see that there is a very strong coralation between Petal Length and Petal Width and a moderate coralation between Sepal Length and Petal length and Petal width. There is also a very small coralation between Sepal Length and Width.
+
+------------------------------------------------------------------------
+
+## 6. Data Reshaping and Aggregation
+
+### A. Load the gapminder dataset from the gapminder package. Reshape the dataset to long format, focusing on the variables year and gdpPercap.
+
+```{r}
+data(gapminder)
+
+gapminderDS <- gapminder
+
+
+gapminderDS <- gapminderDS %>%
+  gather(key = "variable", value = "value", year, gdpPercap)
+
+head(gapminderDS)
+```
+
+### B. Aggregate the data to calculate the average gdpPercap by continent and year.
+
+```{r}
+avgGDP <- aggregate(gdpPercap ~ continent + year, data = gapminder, FUN = mean, na.rm = TRUE)
+
+head(avgGDP)
+```
+
+### C. Create a line plot of the average gdpPercap over time for each continent.
+
+```{r}
+ggplot(avgGDP, aes(x = year, y = gdpPercap, color = continent)) +
+  geom_line() +
+  labs(
+    title = "Average GDP per Capita Over Time",
+    x = "Year",
+    y = "Average GDP per Capita",
+    color = "Continent"
+  ) +
+  theme_classic()
+```
+
+### D. Create a faceted plot showing gdpPercap distributions by continent for the most recent year in the dataset.
+
+```{r}
+maxYear <- max(gapminder$year)
+gapminderDS <- gapminder %>%
+  filter(year == maxYear)
+
+ggplot(gapminderDS, aes(x = gdpPercap, fill = continent)) +
+  geom_histogram(binwidth = 1000) +
+  facet_grid(continent ~ .) +
+  labs(
+    x = "GDP per Capita",
+    y = "Frequency",
+    title = paste("GDP per Capita Distribution by Continent")
+  )
+```
+
+### E. Write a detailed report (6-8 sentences) analyzing the trends and patterns observed in the plots.
+
+From the data we can see that as the years increase the life expectancy and GDP increase. We can also see that Africa's GDP per capita has not increased much and Eurome, and Asia's increased a Lot. Africas GDP per capita is very low for all the countries. The Americas, Asia and Europe have very spread out. Europe has the highest country with GDP per capita. Ocianas lowest GDP per capita is higher than Africas highest GDP per capita. The GDP of the Americas and Asia is comparable. 
+
+------------------------------------------------------------------------
+
+## 7. Probability
+
+### A local fraternity is conducting a raffle where 50 tickets are to be sold, one per customer. There are three prizes to be awarded. If the four organizers of the raffle each buy one ticket, what is the probability that the four organizers win
+
+### A. all of the prizes?
+R Solution: 
+
+```{r}
+numTotalWin <- choose(50, 3)
+
+numOrganizersWin <- choose(4, 3)
+otherWin <- choose(46, 0)
+
+pAllWin <- (numOrganizersWin * otherWin) / numTotalWin
+
+cat("The Probability that all of the prizes are won by the organizers is",
+    pAllWin,
+    "\n")
+```
+### B. exactly two of the prizes?
+
+```{r}
+numOrganizersWin <- choose(4, 2)
+otherWin <- choose(46, 1)
+
+pAllWin <- (numOrganizersWin * otherWin) / numTotalWin
+
+cat("The Probability that exactly two of the prizes are won by the organizers is",
+    pAllWin,
+    "\n")
+```
+
+### C. exactly one of the prizes?
+
+```{r}
+numOrganizersWin <- choose(4, 1)
+otherWin <- choose(46, 2)
+
+pAllWin <- (numOrganizersWin * otherWin) / numTotalWin
+
+cat("The Probability that exactly one of the prizes are won by the organizers is",
+    pAllWin,
+    "\n")
+```
+
+### D. none of the prizes?
+
+```{r}
+numOrganizersWin <- choose(4, 0)
+otherWin <- choose(46, 3)
+
+pAllWin <- (numOrganizersWin * otherWin) / numTotalWin
+
+cat("The Probability that exactly one of the prizes are won by the organizers is",
+    pAllWin,
+    "\n")
+```
