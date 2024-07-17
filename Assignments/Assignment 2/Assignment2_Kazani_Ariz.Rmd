@@ -414,25 +414,47 @@ From the data we can see that as the years increase the life expectancy and GDP 
 ### A local fraternity is conducting a raffle where 50 tickets are to be sold, one per customer. There are three prizes to be awarded. If the four organizers of the raffle each buy one ticket, what is the probability that the four organizers win
 
 ### A. all of the prizes?
+R Solution: 
 
 ```{r}
-# TODO: Finish this question
-```
+numTotalWin <- choose(50, 3)
 
+numOrganizersWin <- choose(4,3)
+otherWin <- choose(46, 0)
+
+pAllWin <- (numOrganizersWin * otherWin )/ numTotalWin
+
+cat("The Probability that all of the prizes are won by the organizers is", pAllWin, "\n")
+```
 ### B. exactly two of the prizes?
 
 ```{r}
-# TODO: add information about assignment and libraries used
+numOrganizersWin <- choose(4,2)
+otherWin <- choose(46, 1)
+
+pAllWin <- (numOrganizersWin * otherWin )/ numTotalWin
+
+cat("The Probability that exactly two of the prizes are won by the organizers is", pAllWin, "\n")
 ```
 
 ### C. exactly one of the prizes?
 
 ```{r}
-# TODO: add information about assignment and libraries used
+numOrganizersWin <- choose(4,1)
+otherWin <- choose(46, 2)
+
+pAllWin <- (numOrganizersWin * otherWin )/ numTotalWin
+
+cat("The Probability that exactly one of the prizes are won by the organizers is", pAllWin, "\n")
 ```
 
 ### D. none of the prizes?
 
 ```{r}
-# TODO: add information about assignment and libraries used
+numOrganizersWin <- choose(4,0)
+otherWin <- choose(46, 3)
+
+pAllWin <- (numOrganizersWin * otherWin )/ numTotalWin
+
+cat("The Probability that exactly one of the prizes are won by the organizers is", pAllWin, "\n")
 ```
