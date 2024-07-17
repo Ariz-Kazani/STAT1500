@@ -36,12 +36,6 @@ library(tidyr)
 
 # install.packages("gapminder")
 library(gapminder)
-
-# TODO:
-# - Format ctrl + shift + a
-# Make sure all questions are completed
-# double check questions
-# install.packages("ggplot2")
 ```
 
 ------------------------------------------------------------------------
@@ -226,7 +220,6 @@ aqdSummary
 ### A. Simulate rolling a fair six-sided die 1000 times. Calculate the empirical probability of each outcome.
 
 ```{r}
-
 simulateDiceRole <- function(n) {
   outcome <- sample(1:6, n, replace = TRUE)
   return(outcome)
@@ -236,7 +229,7 @@ outcome <- simulateDiceRole(1000)
 
 outcome
 
-EP <- table(outcome) / 1000 
+EP <- table(outcome) / 1000
 
 EP
 ```
@@ -256,21 +249,27 @@ outcome <- simulateCardDraw(1000)
 outcome
 
 #find the card value, from 1-13
-outcome <- ifelse(outcome %% 13 == 0, 13, outcome %% 13) 
+outcome <- ifelse(outcome %% 13 == 0, 13, outcome %% 13)
 
-EP <- sum(outcome == 1) /1000
+EP <- sum(outcome == 1) / 1000
 
 cat("Empirical probability of drawing an Ace:", EP)
-
 ```
 
 ### C. Use the binomial distribution to calculate the probability of getting exactly 5 heads in 10 flips of a fair coin. Repeat for getting 5 or more heads.
 
 ```{r}
-prob5Heads <- dbinom(x=5, size=10, prob=0.5)
-cat("The probability of getting exactly 5 heads in 10 flips of a fair coin is:", prob5Heads, "\n")
-prob5MoreHeads <- pbinom(4, size = 10, prob = 0.5, lower.tail = FALSE)
-cat("The probability of 5 or more heads in 10 flips of a fair coin is:", prob5MoreHeads, "\n" )
+prob5Heads <- dbinom(x = 5, size = 10, prob = 0.5)
+cat("The probability of getting exactly 5 heads in 10 flips of a fair coin is:",
+    prob5Heads,
+    "\n")
+prob5MoreHeads <- pbinom(4,
+                         size = 10,
+                         prob = 0.5,
+                         lower.tail = FALSE)
+cat("The probability of 5 or more heads in 10 flips of a fair coin is:",
+    prob5MoreHeads,
+    "\n")
 ```
 
 ### D. Generate a plot showing the probability mass function (PMF) of a binomial distribution with parameters n = 10 and p = 0.5.
@@ -286,7 +285,6 @@ ggplot(df, aes(x = x, y = pmf)) +
   geom_bar(stat = "identity") +
   labs(title = "Probability Mass Function of Binomial Distribution", x = "Number of Successes", y = "Probability") +
   theme_classic()
-
 ```
 
 ------------------------------------------------------------------------
@@ -331,7 +329,7 @@ pairs(iris[1:4], pch = 19, col = colours[iris$Species])
 ```{r}
 ggplot(iris, aes(x = Species, y = Petal.Length, fill = Species)) +
   geom_violin() +
-  labs(title = "Violin Plot of Petal Length by Species") + 
+  labs(title = "Violin Plot of Petal Length by Species") +
   theme_classic()
 ```
 
@@ -340,7 +338,9 @@ ggplot(iris, aes(x = Species, y = Petal.Length, fill = Species)) +
 ```{r}
 correlationMatrix <- cor(iris[, 1:4])
 
-heatmap(correlationMatrix, symm = TRUE, labCol = c("SL", "SW", "PL", "PW"))
+heatmap(correlationMatrix,
+        symm = TRUE,
+        labCol = c("SL", "SW", "PL", "PW"))
 ```
 
 ### E. Write a short analysis (5-7 sentences) interpreting the results from the summary table, scatter plot matrix, violin plot, and heatmap.
@@ -368,9 +368,7 @@ head(gapminderDS)
 ### B. Aggregate the data to calculate the average gdpPercap by continent and year.
 
 ```{r}
-avgGDP<- gapminder %>%
-  group_by(continent, year) %>%
-  summarize(avgGDPpc = mean(gdpPercap, na.rm = TRUE))
+avgGDP <- aggregate(gdpPercap ~ continent + year, data = gapminder, FUN = mean, na.rm = TRUE)
 
 head(avgGDP)
 ```
@@ -378,7 +376,7 @@ head(avgGDP)
 ### C. Create a line plot of the average gdpPercap over time for each continent.
 
 ```{r}
-ggplot(avgGDP, aes(x = year, y = avgGDPpc, color = continent)) +
+ggplot(avgGDP, aes(x = year, y = gdpPercap, color = continent)) +
   geom_line() +
   labs(
     title = "Average GDP per Capita Over Time",
@@ -394,13 +392,16 @@ ggplot(avgGDP, aes(x = year, y = avgGDPpc, color = continent)) +
 ```{r}
 maxYear <- max(gapminder$year)
 gapminderDS <- gapminder %>%
-  filter(year == most_recent_year)
+  filter(year == maxYear)
 
 ggplot(gapminderDS, aes(x = gdpPercap, fill = continent)) +
   geom_histogram(binwidth = 1000) +
   facet_grid(continent ~ .) +
-  labs(x = "GDP per Capita", y = "Frequency", 
-       title = paste("GDP per Capita Distribution by Continent"))
+  labs(
+    x = "GDP per Capita",
+    y = "Frequency",
+    title = paste("GDP per Capita Distribution by Continent")
+  )
 ```
 
 ### E. Write a detailed report (6-8 sentences) analyzing the trends and patterns observed in the plots.
@@ -419,42 +420,50 @@ R Solution:
 ```{r}
 numTotalWin <- choose(50, 3)
 
-numOrganizersWin <- choose(4,3)
+numOrganizersWin <- choose(4, 3)
 otherWin <- choose(46, 0)
 
-pAllWin <- (numOrganizersWin * otherWin )/ numTotalWin
+pAllWin <- (numOrganizersWin * otherWin) / numTotalWin
 
-cat("The Probability that all of the prizes are won by the organizers is", pAllWin, "\n")
+cat("The Probability that all of the prizes are won by the organizers is",
+    pAllWin,
+    "\n")
 ```
 ### B. exactly two of the prizes?
 
 ```{r}
-numOrganizersWin <- choose(4,2)
+numOrganizersWin <- choose(4, 2)
 otherWin <- choose(46, 1)
 
-pAllWin <- (numOrganizersWin * otherWin )/ numTotalWin
+pAllWin <- (numOrganizersWin * otherWin) / numTotalWin
 
-cat("The Probability that exactly two of the prizes are won by the organizers is", pAllWin, "\n")
+cat("The Probability that exactly two of the prizes are won by the organizers is",
+    pAllWin,
+    "\n")
 ```
 
 ### C. exactly one of the prizes?
 
 ```{r}
-numOrganizersWin <- choose(4,1)
+numOrganizersWin <- choose(4, 1)
 otherWin <- choose(46, 2)
 
-pAllWin <- (numOrganizersWin * otherWin )/ numTotalWin
+pAllWin <- (numOrganizersWin * otherWin) / numTotalWin
 
-cat("The Probability that exactly one of the prizes are won by the organizers is", pAllWin, "\n")
+cat("The Probability that exactly one of the prizes are won by the organizers is",
+    pAllWin,
+    "\n")
 ```
 
 ### D. none of the prizes?
 
 ```{r}
-numOrganizersWin <- choose(4,0)
+numOrganizersWin <- choose(4, 0)
 otherWin <- choose(46, 3)
 
-pAllWin <- (numOrganizersWin * otherWin )/ numTotalWin
+pAllWin <- (numOrganizersWin * otherWin) / numTotalWin
 
-cat("The Probability that exactly one of the prizes are won by the organizers is", pAllWin, "\n")
+cat("The Probability that exactly one of the prizes are won by the organizers is",
+    pAllWin,
+    "\n")
 ```
