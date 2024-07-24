@@ -46,31 +46,21 @@ library(gapminder)
 
 ## 1.
 
-### A.
+### A. Simulate rolling a fair twelve-sided die 500 times in R.
 
 ```{r}
 # TODO:
 ```
 
-### B.
+### B. Calculate the empirical probability of rolling a prime number or a multiple of 3 based on the simulation
+
+results. Is this consistent with what you would expect?
 
 ```{r}
 # TODO:
 ```
 
-### C.
-
-```{r}
-# TODO:
-```
-
-### D.
-
-```{r}
-# TODO:
-```
-
-### E.
+### C. Plot a bar chart showing the frequencies of each outcome (1 through 12) obtained from the simulation.
 
 ```{r}
 # TODO:
@@ -80,31 +70,19 @@ library(gapminder)
 
 ## 2.
 
-### A.
+### A. Write R code to calculate the probability of getting at least 4 heads in 8 coin tosses, assuming 𝑝 = 0.6.
 
 ```{r}
 # TODO:
 ```
 
-### B.
+### B. Compute the cumulative probability of getting 4 or more heads.
 
 ```{r}
 # TODO:
 ```
 
-### C.
-
-```{r}
-# TODO:
-```
-
-### D.
-
-```{r}
-# TODO:
-```
-
-### E.
+### C. Plot the probability function (PMF) and cumulative distribution function (CDF) on the same graph.
 
 ```{r}
 # TODO:
@@ -114,19 +92,19 @@ library(gapminder)
 
 ## 3.
 
-### A.
+### A. Use R to compute the probability of observing exactly 3 events in a given time interval, assuming 𝜆 = 2.5 events per hour.
 
 ```{r}
 # TODO:
 ```
 
-### B.
+### B. Compute the cumulative probability of observing 3 or fewer events.
 
 ```{r}
 # TODO:
 ```
 
-### C.
+### C. Plot the probability function (PMF) and cumulative distribution function (CDF) on the same graph.
 
 ```{r}
 # TODO:
@@ -148,31 +126,7 @@ library(gapminder)
 
 ## 4.
 
-### A.
-
-```{r}
-# TODO:
-```
-
-### B.
-
-```{r}
-# TODO:
-```
-
-### C.
-
-```{r}
-# TODO:
-```
-
-### D.
-
-```{r}
-# TODO:
-```
-
-### E.
+Write a function to implement the Linear Congruence Method for pseudo random numbers (PRN). The function should take a length 𝑛, the parameters 𝑚, 𝑎, and 𝑐 as well as the seed 𝑋0 as input and should return a vector 𝑋 = (𝑋1, 𝑋2, … , 𝑋𝑛). Test your function by calling it with the parameters 𝑚 = 8, 𝑎 = 5, 𝑐 = 1 and by comparing the output with the results from class.
 
 ```{r}
 # TODO:
@@ -182,31 +136,21 @@ library(gapminder)
 
 ## 5.
 
-### A.
+Given a sequence 𝑋1, 𝑋2, … , 𝑋𝑛 of 𝑈[0,1]- distributed PRN, we can use a scatter plot of (𝑋𝑖 ,𝑋𝑖+1 ) for 𝑖 = 1, … , 𝑛 − 1 in order to try to assess whether the 𝑋𝑖 are independent.
+
+### A. Create such a plot using the built in random number generator in R. Can you explain the resulting plot.
 
 ```{r}
 # TODO:
 ```
 
-### B.
+### B. Create a similar plot using your function from exercise 1 with 𝑚 = 81, 𝑎 = 1, 𝑐 = 8 and seed 0. Discuss the resulting plot.
 
 ```{r}
 # TODO:
 ```
 
-### C.
-
-```{r}
-# TODO:
-```
-
-### D.
-
-```{r}
-# TODO:
-```
-
-### E.
+### C. Repeat the experiment from (b) using the parameters 𝑚 = 1024, 𝑎 = 401, 𝑐 = 101 and 𝑚 = 2\^32, 𝑎 = 1664525, 𝑐 = 1013904223. Discuss the results.
 
 ```{r}
 # TODO:
@@ -216,32 +160,40 @@ library(gapminder)
 
 ## 6.
 
-### A.
+Simulate a Drunkard's walk in two dimensions. The Drunkard's walk is a random process where at each step, the walker randomly chooses one of eight possible directions (North, South, East, West, Northeast, Southeast, Southwest, Northwest) with varying probabilities. Your task is to implement the simulation according to the following specifications:
+
+### A. Define a vector named probabilities representing the probabilities of moving in each direction:
+
+-   North: 10%
+-   South: 15%
+-   East: 15%
+-   West: 20%
+-   Northeast: 10%
+-   Southeast: 10%
+-   Southwest: 10%
+-   Northwest: 10%
 
 ```{r}
 # TODO:
 ```
 
-### B.
+### B. Write a function named simulate_step that simulates one step of the drunkard's walk:
+
+The function should randomly select one of the eight directions based on the specified probabilities. It should return a vector representing the step in the chosen direction, where the first element indicates the change in the x-coordinate (East/West) and the second element indicates the change in the y-coordinate (North/South).
 
 ```{r}
 # TODO:
 ```
 
-### C.
+### C. Simulate the drunkard's walk for a total of 1000 steps. Initialize a matrix named positions with dimensions (1001, 2) to store the positions of the drunkard at each step. Use a for loop to iteratively call the simulate_step function and update the drunkard's position accordingly.
 
 ```{r}
 # TODO:
 ```
 
-### D.
+### D. Plot the path of the drunkard's walk in two dimensions. Use the plot function to create a line plot of the positions. Mark the starting point in red and the ending point in blue.
 
 ```{r}
 # TODO:
 ```
-
-### E.
-
-```{r}
-# TODO:
-```
+ vmv
