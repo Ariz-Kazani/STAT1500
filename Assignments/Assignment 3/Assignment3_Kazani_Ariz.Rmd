@@ -46,24 +46,46 @@ library(gapminder)
 
 ## 1.
 
-### A. Simulate rolling a fair twelve-sided die 500 times in R.
+c
 
 ```{r}
-# TODO:
+simulateDiceRole <- function(n) {
+  outcome <- sample(1:12, n, replace = TRUE)
+  return(outcome)
+}
+
+outcome <- simulateDiceRole(500)
+
+outcome
 ```
 
-### B. Calculate the empirical probability of rolling a prime number or a multiple of 3 based on the simulation
-
-results. Is this consistent with what you would expect?
+### B. Calculate the empirical probability of rolling a prime number or a multiple of 3 based on the simulation results. Is this consistent with what you would expect?
 
 ```{r}
-# TODO:
+allOutcome <- table(outcome)
+allOutcome
+
+POM3 <- c(2, 3, 5, 6, 7, 9, 11, 12)
+
+sumPrimeORm3 <- sum(allOutcome[POM3])
+sumPrimeORm3
+
+EP <- sumPrimeORm3/500
+
+cat("Expected Probability", 8/12, "\n")
+cat("Simulated Probability", EP, "\n")
 ```
+
+When I initially ran the simulation, the probability I ended up with was 0.67 which is very very close to the expected probability of 0.66666666...
 
 ### C. Plot a bar chart showing the frequencies of each outcome (1 through 12) obtained from the simulation.
 
 ```{r}
-# TODO:
+barplot(allOutcome,
+        main = "Frequency of outcomes when rolling a 12 sided die 12 times",
+        xlab = "Outcome",
+        ylab = "Frequency",
+        col = "blue",)
 ```
 
 ------------------------------------------------------------------------
@@ -73,19 +95,33 @@ results. Is this consistent with what you would expect?
 ### A. Write R code to calculate the probability of getting at least 4 heads in 8 coin tosses, assuming 𝑝 = 0.6.
 
 ```{r}
-# TODO:
+pminFourHead <- 1 - pbinom(3, size = 8, prob = 0.6)
+pminFourHead
 ```
 
 ### B. Compute the cumulative probability of getting 4 or more heads.
 
 ```{r}
-# TODO:
+# this question did not specify the p value so I'm going to assume it's 0.5
+pminFourHead <- 1 - pbinom(3, size = 8, prob = 0.5)
+pminFourHead
 ```
 
 ### C. Plot the probability function (PMF) and cumulative distribution function (CDF) on the same graph.
 
 ```{r}
-# TODO:
+index <- 0:8
+
+pmf <- dbinom(index, size = 8, prob = 0.5)
+cdf <- pbinom(index, size = 8, prob = 0.5)
+
+df <- data.frame(index, pmf, cdf)
+
+ggplot(df, aes(x = index, y = pmf)) +
+  geom_bar(stat = "identity") +
+  geom_line(aes(y = cdf)) +
+  labs(title = "Probability Mass Function and Cumulative Distribution Function", x = "Number of Heads", y = "Probability") +
+  theme_classic()
 ```
 
 ------------------------------------------------------------------------
@@ -95,31 +131,39 @@ results. Is this consistent with what you would expect?
 ### A. Use R to compute the probability of observing exactly 3 events in a given time interval, assuming 𝜆 = 2.5 events per hour.
 
 ```{r}
-# TODO:
+POE3E <- dpois(3, 2.5)
+POE3E
 ```
 
 ### B. Compute the cumulative probability of observing 3 or fewer events.
 
 ```{r}
-# TODO:
+POE3EOF <- ppois(3, 2.5)
+POE3EOF
 ```
 
 ### C. Plot the probability function (PMF) and cumulative distribution function (CDF) on the same graph.
 
 ```{r}
-# TODO:
-```
+# Create a sequence of events
+events <- 0:qpois(0.99, 2.5)
 
-### D.
+# Compute PMF and CDF values
+pmf_values <- dpois(events, 2.5)
+cdf_values <- ppois(events, 2.5)
 
-```{r}
-# TODO:
-```
+# Create a data frame for plotting
+data <- data.frame(events, pmf_values, cdf_values)
 
-### E.
-
-```{r}
-# TODO:
+# Plot PMF and CDF on the same graph
+ggplot(data, aes(x = events)) +
+  geom_bar(aes(y = pmf_values), stat = "identity", fill = "blue") +
+  geom_line(aes(y = cdf_values), color = "red") +
+  labs(title = "Poisson Distribution (λ = 2.5)",
+       x = "Number of Events",
+       y = "Probability") +
+  theme_classic() +
+  scale_y_continuous(sec.axis = sec_axis(~., name = "Cumulative Probability"))
 ```
 
 ------------------------------------------------------------------------
@@ -196,4 +240,4 @@ The function should randomly select one of the eight directions based on the spe
 ```{r}
 # TODO:
 ```
- vmv
+
