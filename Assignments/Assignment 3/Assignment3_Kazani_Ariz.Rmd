@@ -25,19 +25,18 @@ library(rmarkdown)
 # install.packages("ggplot2")
 library(ggplot2)
 
+# usefull libraries not required for this assignment 
 # install.packages("patchwork")
-library(patchwork)
+# library(patchwork)
 
 # install.packages("dplyr")
-library(dplyr)
+# library(dplyr)
 
 # install.packages("tidyr")
-library(tidyr)
+# library(tidyr)
 
 # install.packages("gapminder")
-library(gapminder)
-
-# TODO: double check quesion
+# library(gapminder)
 ```
 
 ------------------------------------------------------------------------
@@ -79,7 +78,7 @@ cat("Expected Probability", 8/12, "\n")
 cat("Simulated Probability", EP, "\n")
 ```
 
-When I initially ran the simulation, the probability I ended up with was 0.67 which is very very close to the expected probability of 0.66666666...
+When I initially ran the simulation, the probability I ended up with was 0.67 which is very very close to the expected probability of 0.66666666 ...
 
 ### C. Plot a bar chart showing the frequencies of each outcome (1 through 12) obtained from the simulation.
 
@@ -95,7 +94,7 @@ barplot(allOutcome,
 
 ## 2.
 
-### A. Write R code to calculate the probability of getting at least 4 heads in 8 coin tosses, assuming 𝑝 = 0.6.
+### A. Write R code to calculate the probability of getting at least 4 heads in 8 coin tosses, assuming p = 0.6.
 
 ```{r}
 pminFourHead <- 1 - pbinom(3, size = 8, prob = 0.6)
@@ -132,7 +131,7 @@ ggplot(df, aes(x = index, y = pmf)) +
 
 ## 3.
 
-### A. Use R to compute the probability of observing exactly 3 events in a given time interval, assuming 𝜆 = 2.5 events per hour.
+### A. Use R to compute the probability of observing exactly 3 events in a given time interval, assuming lambda = 2.5 events per hour.
 
 ```{r}
 POE3E <- dpois(3, 2.5)
@@ -170,7 +169,7 @@ ggplot(data, aes(x = events, y = pmf)) +
 
 ## 4.
 
-Write a function to implement the Linear Congruence Method for pseudo random numbers (PRN). The function should take a length 𝑛, the parameters 𝑚, 𝑎, and 𝑐 as well as the seed 𝑋0 as input and should return a vector 𝑋 = (𝑋1, 𝑋2, … , 𝑋𝑛). Test your function by calling it with the parameters 𝑚 = 8, 𝑎 = 5, 𝑐 = 1 and by comparing the output with the results from class.
+Write a function to implement the Linear Congruence Method for pseudo random numbers (PRN). The function should take a length n, the parameters m, a, and c as well as the seed X0 as input and should return a vector X = (X1, X2, ... , Xn). Test your function by calling it with the parameters m = 8, a = 5, c = 1 and by comparing the output with the results from class.
 
 ```{r}
 lc <- function(n, seed, m, a, c) {
@@ -196,7 +195,7 @@ This question was kind of ambiguous i n the sense that the letters were differen
 
 ## 5.
 
-Given a sequence 𝑋1, 𝑋2, … , 𝑋𝑛 of 𝑈[0,1]- distributed PRN, we can use a scatter plot of (𝑋𝑖 ,𝑋𝑖+1 ) for 𝑖 = 1, … , 𝑛 − 1 in order to try to assess whether the 𝑋𝑖 are independent.
+Given a sequence X1, X2, ... , Xn of U[0,1]- distributed PRN, we can use a scatter plot of (Xi ,Xi+1 ) for i = `1 , … , n - ` in order to try to assess whether the Xi are independent.
 
 ### A. Create such a plot using the built in random number generator in R. Can you explain the resulting plot.
 
@@ -209,7 +208,7 @@ plot(arr[-100], arr[-1], main="Scatter plot of X and X + 1 when using R'srandom 
 
 I cannot explain the contents of the plot as they look completly random to me and I see no corolation or pattern.
 
-### B. Create a similar plot using your function from exercise 1 with 𝑚 = 81, 𝑎 = 1, 𝑐 = 8 and seed 0. Discuss the resulting plot.
+### B. Create a similar plot using your function from exercise 1 with m = 81, a = 1, c = 8 and seed 0. Discuss the resulting plot.
 
 ```{r}
 arr <- lc(100, 0, 81, 1, 8)
@@ -217,11 +216,19 @@ par(pty="s")
 plot(arr[-100], arr[-1], main="Scatter plot of X and X + 1 when using custom random function", xlab="Value at index X", ylab="Value at index X + 1")
 ```
 
-### C. Repeat the experiment from (b) using the parameters 𝑚 = 1024, 𝑎 = 401, 𝑐 = 101 and 𝑚 = 2\^32, 𝑎 = 1664525, 𝑐 = 1013904223. Discuss the results.
+We can see that the length of the output is 100 but the graph only shows 8 points, this shows us that the parameters m = 81, a = 1, c = 8, are in fact bad for creating random numbers as the numbers generated are cyclical.
+
+### C. Repeat the experiment from (b) using the parameters m = 1024, a = 401, c = 101 and m = 2\^32, a = 1664525, c = 1013904223. Discuss the results.
 
 ```{r}
-# TODO:
+arr1 <- lc(100, 0, 1024, 401, 101)
+arr2 <- lc(100, 0, 2 ** 32, 1664525, 1013904223)
+par(pty="s") 
+plot(arr1[-100], arr1[-1], main="Scatter plot of X and X + 1 when using custom random function M num", xlab="Value at index X", ylab="Value at index X + 1")
+plot(arr2[-100], arr2[-1], main="Scatter plot of X and X + 1 when using custom random function L num", xlab="Value at index X", ylab="Value at index X + 1")
 ```
+
+When we used the medium numbers we got a few more data points, and when we used the large numbers we got points comparable to R's built in function. This shows us that with the linear congruent method of generating PRM, the greater the numbers are, the more randomness we can produce. This held true for all of the random seeds I tested too.
 
 ------------------------------------------------------------------------
 
