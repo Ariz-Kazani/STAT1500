@@ -25,7 +25,7 @@ library(rmarkdown)
 # install.packages("ggplot2")
 library(ggplot2)
 
-# usefull libraries not required for this assignment 
+# usefull libraries not required for this assignment
 # install.packages("patchwork")
 # library(patchwork)
 
@@ -72,9 +72,9 @@ POM3 <- c(2, 3, 5, 6, 7, 9, 11, 12)
 sumPrimeORm3 <- sum(allOutcome[POM3])
 sumPrimeORm3
 
-EP <- sumPrimeORm3/500
+EP <- sumPrimeORm3 / 500
 
-cat("Expected Probability", 8/12, "\n")
+cat("Expected Probability", 8 / 12, "\n")
 cat("Simulated Probability", EP, "\n")
 ```
 
@@ -83,11 +83,13 @@ When I initially ran the simulation, the probability I ended up with was 0.67 wh
 ### C. Plot a bar chart showing the frequencies of each outcome (1 through 12) obtained from the simulation.
 
 ```{r}
-barplot(allOutcome,
-        main = "Frequency of outcomes when rolling a 12 sided die 12 times",
-        xlab = "Outcome",
-        ylab = "Frequency",
-        col = "blue",)
+barplot(
+  allOutcome,
+  main = "Frequency of outcomes when rolling a 12 sided die 12 times",
+  xlab = "Outcome",
+  ylab = "Frequency",
+  col = "blue",
+)
 ```
 
 ------------------------------------------------------------------------
@@ -159,9 +161,7 @@ data <- data.frame(events, pmf, cdf)
 ggplot(data, aes(x = events, y = pmf)) +
   geom_bar(stat = "identity") +
   geom_line(aes(y = cdf)) +
-  labs(title = "Poisson Distribution PMF (bars) and CDF (line)",
-       x = "Number of Events",
-       y = "Probability") +
+  labs(title = "Poisson Distribution PMF (bars) and CDF (line)", x = "Number of Events", y = "Probability") +
   theme_classic()
 ```
 
@@ -174,13 +174,13 @@ Write a function to implement the Linear Congruence Method for pseudo random num
 ```{r}
 lc <- function(n, seed, m, a, c) {
   arr <- numeric(n + 1)
-
+  
   arr[1] <- seed
   for (i in 2:(n + 1)) {
-    arr[i] <- (m * arr[i-1] + a) %% c
+    arr[i] <- (m * arr[i - 1] + a) %% c
   }
   return(arr[-1])
-} 
+}
 print("output based on the description and a random seed: ")
 lc(10, 7, 8, 5, 1)
 print("Using m = 1, a = 7 and c = 10 and a seed of 7 (based on lecture video #14")
@@ -200,20 +200,30 @@ Given a sequence X1, X2, ... , Xn of U[0,1]- distributed PRN, we can use a scatt
 ### A. Create such a plot using the built in random number generator in R. Can you explain the resulting plot.
 
 ```{r}
-set.seed(0) # seting the seed to 0 to be consistand with the next question
+set.seed(0)
 arr <- runif(100)
-par(pty="s") 
-plot(arr[-100], arr[-1], main="Scatter plot of X and X + 1 when using R'srandom function", xlab="Value at index X", ylab="Value at index X + 1")
+
+par(pty = "s")
+plot(arr[-100],
+     arr[-1],
+     main = "Scatter plot of X and X + 1 when using R'srandom function",
+     xlab = "Value at index X",
+     ylab = "Value at index X + 1")
 ```
 
-I cannot explain the contents of the plot as they look completly random to me and I see no corolation or pattern.
+I cannot explain the contents of the plot as they look completely random to me and I see no correlation or pattern.
 
 ### B. Create a similar plot using your function from exercise 1 with m = 81, a = 1, c = 8 and seed 0. Discuss the resulting plot.
 
 ```{r}
 arr <- lc(100, 0, 81, 1, 8)
-par(pty="s") 
-plot(arr[-100], arr[-1], main="Scatter plot of X and X + 1 when using custom random function", xlab="Value at index X", ylab="Value at index X + 1")
+
+par(pty = "s")
+plot(arr[-100],
+     arr[-1],
+     main = "Scatter plot of X and X + 1 when using custom random function",
+     xlab = "Value at index X",
+     ylab = "Value at index X + 1")
 ```
 
 We can see that the length of the output is 100 but the graph only shows 8 points, this shows us that the parameters m = 81, a = 1, c = 8, are in fact bad for creating random numbers as the numbers generated are cyclical.
@@ -223,9 +233,19 @@ We can see that the length of the output is 100 but the graph only shows 8 point
 ```{r}
 arr1 <- lc(100, 0, 1024, 401, 101)
 arr2 <- lc(100, 0, 2 ** 32, 1664525, 1013904223)
-par(pty="s") 
-plot(arr1[-100], arr1[-1], main="Scatter plot of X and X + 1 when using custom random function M num", xlab="Value at index X", ylab="Value at index X + 1")
-plot(arr2[-100], arr2[-1], main="Scatter plot of X and X + 1 when using custom random function L num", xlab="Value at index X", ylab="Value at index X + 1")
+
+par(pty = "s")
+plot(arr1[-100],
+     arr1[-1],
+     main = "Scatter plot of X and X + 1 when using custom random function M num",
+     xlab = "Value at index X",
+     ylab = "Value at index X + 1")
+
+plot(arr2[-100],
+     arr2[-1],
+     main = "Scatter plot of X and X + 1 when using custom random function L num",
+     xlab = "Value at index X",
+     ylab = "Value at index X + 1")
 ```
 
 When we used the medium numbers we got a few more data points, and when we used the large numbers we got points comparable to R's built in function. This shows us that with the linear congruent method of generating PRM, the greater the numbers are, the more randomness we can produce. This held true for all of the random seeds I tested too.
@@ -248,7 +268,8 @@ Simulate a Drunkard's walk in two dimensions. The Drunkard's walk is a random pr
 -   Northwest: 10%
 
 ```{r}
-# TODO:
+probabilities <- c(0.1, 0.15, 0.15, 0.2, 0.1, 0.1, 0.1, 0.1)
+probabilities
 ```
 
 ### B. Write a function named simulate_step that simulates one step of the drunkard's walk:
@@ -256,17 +277,50 @@ Simulate a Drunkard's walk in two dimensions. The Drunkard's walk is a random pr
 The function should randomly select one of the eight directions based on the specified probabilities. It should return a vector representing the step in the chosen direction, where the first element indicates the change in the x-coordinate (East/West) and the second element indicates the change in the y-coordinate (North/South).
 
 ```{r}
-# TODO:
+simulate_step <- function(probabilities) {
+  directions <- list(c(0, 1),
+                     c(0, -1),
+                     c(1, 0),
+                     c(-1, 0),
+                     c(1, 1),
+                     c(1, -1),
+                     c(-1, -1),
+                     c(-1, 1))
+  
+  returnI <- sample(1:8, size = 1, prob = probabilities)
+  
+  return(directions[[returnI]])
+}
+
+set.seed(7)
+testStep <- simulate_step(probabilities)
+testStep
 ```
 
 ### C. Simulate the drunkard's walk for a total of 1000 steps. Initialize a matrix named positions with dimensions (1001, 2) to store the positions of the drunkard at each step. Use a for loop to iteratively call the simulate_step function and update the drunkard's position accordingly.
 
 ```{r}
-# TODO:
+set.seed(7)
+positions <- matrix(0, nrow = 1001, ncol = 2)
+for (i in 1:1000) {
+  positions[i + 1, ] <- positions[i, ] + simulate_step(probabilities)
+}
+
+head(positions)
 ```
 
 ### D. Plot the path of the drunkard's walk in two dimensions. Use the plot function to create a line plot of the positions. Mark the starting point in red and the ending point in blue.
 
 ```{r}
-# TODO:
+plot(
+  positions[, 1],
+  positions[, 2],
+  type = "l",
+  col = "black",
+  main = "Drunkard's Walk",
+  xlab = "X",
+  ylab = "Y"
+)
+points(positions[1, 1], positions[1, 2], col = "red", pch = 10)
+points(positions[1001, 1], positions[1001, 2], col = "blue", pch = 10)
 ```
