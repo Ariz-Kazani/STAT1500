@@ -18,14 +18,16 @@ output: pdf_document
 ```{r}
 # Libraries
 
-# NOTE: if you do not have any of the below libraries installed, un-comment the line and run it
+# NOTE: if you do not have any of the below libraries installed, 
+# un-comment the line and run it
+
 # install.packages("rmarkdown")
 library(rmarkdown)
 
 # install.packages("ggplot2")
 library(ggplot2)
 
-# usefull libraries not required for this assignment
+# useful libraries not required for this assignment
 # install.packages("patchwork")
 # library(patchwork)
 
@@ -37,6 +39,7 @@ library(ggplot2)
 
 # install.packages("gapminder")
 # library(gapminder)
+
 ```
 
 ------------------------------------------------------------------------
@@ -78,7 +81,7 @@ cat("Expected Probability", 8 / 12, "\n")
 cat("Simulated Probability", EP, "\n")
 ```
 
-When I initially ran the simulation, the probability I ended up with was 0.67 which is very very close to the expected probability of 0.66666666 ...
+When I initially ran the simulation, the probability I ended up with was 0.67 which is very very close to the expected probability of 0.666
 
 ### C. Plot a bar chart showing the frequencies of each outcome (1 through 12) obtained from the simulation.
 
@@ -106,8 +109,10 @@ pminFourHead
 ### B. Compute the cumulative probability of getting 4 or more heads.
 
 ```{r}
-# this question did not specify the p value so I'm going to assume it's 0.5 otherwise its the same as q1
 # aren't a and b asking the same thing?
+# this question did not specify the p value 
+#so I'm going to assume it's 0.5 otherwise its the same as q1
+
 pminFourHead <- 1 - pbinom(3, size = 8, prob = 0.5)
 pminFourHead
 ```
@@ -125,7 +130,10 @@ df <- data.frame(index, pmf, cdf)
 ggplot(df, aes(x = index, y = pmf)) +
   geom_bar(stat = "identity") +
   geom_line(aes(y = cdf)) +
-  labs(title = "Probability Mass Function (bars) and Cumulative Distribution Function (line)", x = "Number of Heads", y = "Probability") +
+  labs(
+    title = "Probability Mass Function (bars) and Cumulative Distribution Function (line)", 
+    x = "Number of Heads", 
+    y = "Probability") +
   theme_classic()
 ```
 
@@ -154,14 +162,15 @@ events <- 0:qpois(0.99, 2.5)
 
 pmf <- dpois(events, 2.5)
 cdf <- ppois(events, 2.5)
-
 data <- data.frame(events, pmf, cdf)
 
-# Plot PMF and CDF on the same graph
 ggplot(data, aes(x = events, y = pmf)) +
   geom_bar(stat = "identity") +
   geom_line(aes(y = cdf)) +
-  labs(title = "Poisson Distribution PMF (bars) and CDF (line)", x = "Number of Events", y = "Probability") +
+  labs(
+    title = "Poisson Distribution PMF (bars) and CDF (line)", 
+    x = "Number of Events", 
+    y = "Probability") +
   theme_classic()
 ```
 
@@ -189,13 +198,13 @@ print("my my function")
 lc(10, 7, 1, 7, 10)
 ```
 
-This question was kind of ambiguous i n the sense that the letters were different form the one in lecture 14 so I assumed m, a and c were mapped to a, b, c respectively. For the first part we can see that we are modding by 1, so the answer will always be 0. When trying the example from the lecture we can see that it is correctly implemented and returns the expected output.
+This question was kind of ambiguous in the sense that the letters were different form the one in lecture 14 so I assumed m, a and c were mapped to a, b, c respectively. For the first part we can see that we are modding by 1, so the answer will always be 0. When trying the example from the lecture we can see that it is correctly implemented and returns the expected output.
 
 ------------------------------------------------------------------------
 
 ## 5.
 
-Given a sequence X1, X2, ... , Xn of U[0,1]- distributed PRN, we can use a scatter plot of (Xi ,Xi+1 ) for i = `1 , … , n - ` in order to try to assess whether the Xi are independent.
+Given a sequence X1, X2, ... , Xn of U[0,1]- distributed PRN, we can use a scatter plot of (Xi ,Xi+1 ) for i = `1 , … , n -` in order to try to assess whether the Xi are independent.
 
 ### A. Create such a plot using the built in random number generator in R. Can you explain the resulting plot.
 
@@ -206,7 +215,7 @@ arr <- runif(100)
 par(pty = "s")
 plot(arr[-100],
      arr[-1],
-     main = "Scatter plot of X and X + 1 when using R'srandom function",
+     main = "Scatter plot of X and X + 1 when using R's random function",
      xlab = "Value at index X",
      ylab = "Value at index X + 1")
 ```
@@ -221,7 +230,7 @@ arr <- lc(100, 0, 81, 1, 8)
 par(pty = "s")
 plot(arr[-100],
      arr[-1],
-     main = "Scatter plot of X and X + 1 when using custom random function",
+     main = "Scatter plot of X and X + 1 when using a custom random function",
      xlab = "Value at index X",
      ylab = "Value at index X + 1")
 ```
@@ -237,18 +246,18 @@ arr2 <- lc(100, 0, 2 ** 32, 1664525, 1013904223)
 par(pty = "s")
 plot(arr1[-100],
      arr1[-1],
-     main = "Scatter plot of X and X + 1 when using custom random function M num",
+     main = "Scatter plot of X and X + 1 when using a custom random function M nums",
      xlab = "Value at index X",
      ylab = "Value at index X + 1")
 
 plot(arr2[-100],
      arr2[-1],
-     main = "Scatter plot of X and X + 1 when using custom random function L num",
+     main = "Scatter plot of X and X + 1 when using a custom random function L nums",
      xlab = "Value at index X",
      ylab = "Value at index X + 1")
 ```
 
-When we used the medium numbers we got a few more data points, and when we used the large numbers we got points comparable to R's built in function. This shows us that with the linear congruent method of generating PRM, the greater the numbers are, the more randomness we can produce. This held true for all of the random seeds I tested too.
+When we used the medium numbers we got a few more data points, and when we used the large numbers we got points comparable (in terms of perceived randomness) to R's built in function. This shows us that with the linear congruent method of generating PRM, the greater the input numbers are, the more randomness we can produce. This held true for all of the random seeds I tested too.
 
 ------------------------------------------------------------------------
 
@@ -287,12 +296,11 @@ simulate_step <- function(probabilities) {
                      c(-1, -1),
                      c(-1, 1))
   
-  returnI <- sample(1:8, size = 1, prob = probabilities)
-  
-  return(directions[[returnI]])
+  probI <- sample(1:8, size = 1, prob = probabilities)
+  return(directions[[probI]])
 }
 
-set.seed(7)
+set.seed(0)
 testStep <- simulate_step(probabilities)
 testStep
 ```
@@ -300,8 +308,9 @@ testStep
 ### C. Simulate the drunkard's walk for a total of 1000 steps. Initialize a matrix named positions with dimensions (1001, 2) to store the positions of the drunkard at each step. Use a for loop to iteratively call the simulate_step function and update the drunkard's position accordingly.
 
 ```{r}
-set.seed(7)
+set.seed(0)
 positions <- matrix(0, nrow = 1001, ncol = 2)
+
 for (i in 1:1000) {
   positions[i + 1, ] <- positions[i, ] + simulate_step(probabilities)
 }
