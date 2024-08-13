@@ -72,19 +72,55 @@ pTrans
 transitions over time.
 
 ```{r}
+simMC <- function(tMatrix, start, numRow, numSteps) {
+  states <- numeric(numSteps + 1) 
+  states[1] <- sample(1:numRow, 1, prob = start)
+  
+  for (i in 1:numSteps) {
+    states[i + 1] <- sample(1:numRow, 1, prob = tMatrix[, states[i]])
+  }
+  
+  return(states)
+}
+
+x0 <- c(1, 0, 0) #start at A
+
+set.seed(7)
+totsim <- simMC(pTrans, x0, 3, 100)
+
+plot(
+  0:100 ,
+  totsim,
+  type = "p",
+  pch = 16,
+  lwd = 1,
+  xlab = "Step #",
+  ylab = "State Probability",
+  main = "Marlkov Chain Simulation Over Steps"
+)
 
 ```
 
 ### C. Compute the stationary distribution of the Markov Chain using the transition matrix.
 
 ```{r}
-
+eigenVals <- eigen(pTrans)
+statDist <- eigenVals$vectors[,1]
+statDist <- statDist / sum(statDist)
+statDist
 ```
 
 ### D. Verify the stationary distribution result by simulating the chain for a large number of steps (e.g., 10,000) and comparing the proportion of time spent in each state with the stationary distribution.
 
 ```{r}
+set.seed(7)
 
+lgSim <- simMC(pTrans, x0, 3, 10000)
+
+ed <- table(lgSim) / length(lgSim)
+
+statDist
+ed
 ```
 
 ------------------------------------------------------------------------
