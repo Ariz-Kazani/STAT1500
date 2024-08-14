@@ -92,7 +92,7 @@ plot(
   0:100 ,
   totsim,
   type = "p",
-  pch = 16,
+  pch = 19,
   lwd = 1,
   xlab = "Step #",
   ylab = "State Probability",
@@ -119,8 +119,8 @@ lgSim <- simMC(pTrans, x0, 3, 10000)
 
 ed <- table(lgSim) / length(lgSim)
 
-statDist
-ed
+cat("Simulated distribution", ed, "\n")
+cat("Theoretical distribution", statDist, "\n")
 ```
 
 ------------------------------------------------------------------------
@@ -134,26 +134,76 @@ ed
 3.  Use the ratio of points inside the circle to the total number of points to estimate pi.
 
 ```{r}
+set.seed(7)
+x <- runif(1000, -0.5, 0.5)
+y <- runif(1000, -0.5, 0.5)
 
+numI <- sum(x^2 + y^2 <= 0.25)
+
+piE <- (numI / 250)
+piE
 ```
 
 ### B. Write an R function to perform this simulation with 10,000 points.
 
 ```{r}
+set.seed(7)
 
+ePi <- function(count) {
+  x <- runif(count, -0.5, 0.5)
+  y <- runif(count, -0.5, 0.5)
+  
+  numI <- sum(x ^ 2 + y ^ 2 <= 0.25)
+  
+  piE <- (numI / (count/4))
+  piE
+}
+
+ePi(10000)
 ```
 
 ### C. Plot the generated points, differentiating between points inside and outside the circle. Overlay the circle on the plot.
 
 ```{r}
+set.seed(7)
+x <- runif(1000, -0.5, 0.5)
+y <- runif(1000, -0.5, 0.5)
+
+plot(
+  x,
+  y,
+  col = ifelse(x ^ 2 + y ^ 2 <= 0.25 , "green", "red"),
+  pch = 19,
+  main = "Estimating pi with Random points",
+  xlab = "X",
+  ylab = "Y",
+  asp = 1
+)
+
+legend(
+  legend = c("Inside Circle", "Outside Circle"),
+  col = c("green", "red"),
+  pch = 19,
+   "topright"
+)
 
 ```
 
 ### D. Calculate the estimated value of pi from your simulation and compare it to the true value of pi. Discuss the accuracy of the estimate.
 
 ```{r}
+set.seed(7)
+cat("Estimated Value of pi with 1000 random numbers", ePi(1000), "\n")
+cat("Estimated Value of pi with 10000 random numbers", ePi(10000), "\n")
+cat("Estimated Value of pi with 100000 random numbers", ePi(100000), "\n")
+cat("Estimated Value of pi with 1000000 random numbers", ePi(1000000), "\n")
+cat("Estimated Value of pi with 10000000 random numbers", ePi(10000000), "\n")
+cat("Estimated Value of pi with 100000000 random numbers", ePi(100000000), "\n")
 
+cat("True value of pi", 3.1415926)
 ```
+
+As we can observe, the more points that are generated, the more accurate the simulations gets, with 100000000 points getting a accuracy of 5 digits. On a side note, each simulation to an exponentially greater time than the previous.
 
 ------------------------------------------------------------------------
 
