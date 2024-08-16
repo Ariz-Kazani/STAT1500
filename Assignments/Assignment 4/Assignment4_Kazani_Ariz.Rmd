@@ -27,6 +27,9 @@ library(rmarkdown)
 # install.packages("ggplot2")
 library(ggplot2)
 
+# install.packages("lpSolve")
+library(lpSolve)
+
 # useful libraries not required for this assignment
 # install.packages("patchwork")
 # library(patchwork)
@@ -217,7 +220,19 @@ As we can observe, the more points that are generated, the more accurate the sim
 -   x~1~, x~2~ \>= 0
 
 ```{r}
+# maximize 
+# Z <- 3 * x1 + 2 * x2
 
+#constraints, 
+
+# 2 * x1 + x2 <= 20
+# 4 * x1 + 5 * x2 >= -10
+# x1 + 2 * x2 <= 15
+# x1 >= 0 && x2 >= 0
+
+objective <- c(3, 2)
+constraints <- matrix(c(2, 1, 4, 5, 1, 2), nrow = 2, byrow = TRUE)
+ 
 ```
 
 ### B. Solve the linear programming problem using the lpSolve package in R. Provide the R code and solution.
