@@ -220,32 +220,34 @@ As we can observe, the more points that are generated, the more accurate the sim
 -   x~1~, x~2~ \>= 0
 
 ```{r}
-# maximize 
+# Objective Function
 # Z <- 3 * x1 + 2 * x2
 
-#constraints, 
-
+# Constraints
 # 2 * x1 + x2 <= 20
 # 4 * x1 + 5 * x2 >= -10
 # x1 + 2 * x2 <= 15
 # x1 >= 0 && x2 >= 0
-
-objective <- c(3, 2)
-constraints <- matrix(c(2, 1, 4, 5, 1, 2), nrow = 2, byrow = TRUE)
- 
 ```
 
 ### B. Solve the linear programming problem using the lpSolve package in R. Provide the R code and solution.
 
 ```{r}
+objective <- c(3, 2)
+constraints <- matrix(c(2, 1, 4, 5, 1, 2), nrow = 3, byrow = TRUE)
+rhs <- c(20, -10, 15)
+directions <- c("<=", ">=", "<=")
+solution <- lp("max", objective, constraints, directions, rhs)
 
+solution$solution
+solution$objval
 ```
 
 ### C. Interpret the solution, including the values of x1x_1x1 and x2x_2x2, and the maximum value of ZZZ.
 
-```{r}
+(side not I have not clue what x1x_1x1, x2x_2x2 and ZZZ is so im going to assume its asking for x1, x2 and Z)
 
-```
+The max value of x1 and x2 are both greater than zero meaning that some x1s and some x2s are required to reach the maximum value, 31.666666 in this case.
 
 ------------------------------------------------------------------------
 
