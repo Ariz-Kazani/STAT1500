@@ -247,7 +247,7 @@ solution$objval
 
 (side note I have not clue what x1x_1x1, x2x_2x2 and ZZZ is so I'm going to assume its asking for x1, x2 and Z)
 
-The max value of x1 and x2 are both greater than zero meaning that some x1s and some x2s are required to reach the maximum value, 31.666666 in this case. When performing an objective function coefficient analysis we can see that increasing either of the objective coefficients increased the maximum val and decreasing either had the opposite affect. Increasing the coefficient of x1 to \>= 4 made the optimal x2 value 0. When performing a RHS analysis we can see that The maximum decreasing the first and last, decreased the possible maximum value increasing them had the opposite effect, where moving the middle number up to 50 and down to -99999 had no effect, moving the middle number any higher causes the maximum value become 0 with optimal values for x1 and x2 also becoming 0. When performing a constraint coefficient analysis we can see that increasing the coefficients of the first restriction reduces the maximum value, decreasing them has the same affect. Increasing the coefficients in the second restriction had no affect and decreasing the coefficients decreased the maximum value. The coefficients in the last restriction behaved like the first restriction.
+The max value of x1 and x2 are both greater than zero meaning that some x1s and some x2s are required to reach the maximum value, 31.666666 in this case. When performing an objective function coefficient analysis we can see that increasing either of the objective coefficients increased the maximum val and decreasing either had the opposite affect. Increasing the coefficient of x1 to \>= 4 made the optimal x2 value 0. When performing a RHS analysis we can see that the maximum increases the when you increase the first and last numbers, decreased them had the opposite effect, where moving the middle number up to 50 and down to -99999 had no effect, moving the middle number any higher causes the maximum value become 0 with optimal values for x1 and x2 also becoming 0. When performing a constraint coefficient analysis we can see that increasing the coefficients of the first restriction reduces the maximum value, decreasing them has the opposite affect. Increasing the coefficients in the second restriction had no affect and decreasing the coefficients decreased the maximum value. The coefficients in the last restriction behaved like the first restriction.
 
 ------------------------------------------------------------------------
 
@@ -260,26 +260,38 @@ The max value of x1 and x2 are both greater than zero meaning that some x1s and 
 -   x~1~, x~2~ \>= 0 and integers
 
 ```{r}
+# Objective Function
+# Z <- 4 * x1 + 3 * x2
+
+# Constraints
+# 3 * x1 + 2 * x2 <= 12
+# x1 + x2 >= 1
+# x1 >= 0 && x2 >= 0 && x1 %% 1 == 0 && x2 %% 1 == 0
 
 ```
 
 ### B. Solve the integer programming problem using the ompr package in R. Provide the R code and solution.
 
 ```{r}
+objective <- c(4, 3)
+constraints <- matrix(c(3, 2, 1, 1), nrow = 2, byrow = TRUE)
+rhs <- c(12, 1)
+directions <- c("<=", ">=")
+solution <- lp("max", objective, constraints, directions, rhs, all.int = TRUE)
 
+solution$solution
+solution$objval
 ```
 
 ### C. Interpret the solution, including the values of x~1~ and x~2~, and the maximum value of Z.
 
-```{r}
+The max value of x1 is 0, and x2 is greater than zero meaning that 0 x1s and some x2s are required to reach the maximum value, 18 in this case.
 
-```
+When performing an objective function coefficient analysis we can see that increasing either of the objective coefficients increased the maximum val and decreasing either had the opposite affect. When performing a RHS analysis we can see that increasing the first number increases the maximum value, decreased opposite effect. where moving the second number up to 6 and down to -99999 had no effect, moving the second number any higher causes the maximum value to become 0 with optimal values for x1 and x2 also becoming 0. When performing a constraint coefficient analysis we can see that increasing the coefficients of the first as no effect for the first one and the second one causes the maximum value to go to zero, decreasing them causes the maximum value. Increasing the coefficients in the second restriction had no affect and decreasing the coefficients decreased the maximum value, only for the second one in the second restriction.
 
 ### D. Discuss the differences between the linear and integer programming solutions and the situations in which integer programming is necessary.
 
-```{r}
-
-```
+The difference between Linear programming is that linear programming will usually find a value greater than integer programming. Linear programming is also continuous where as integer programming is discrete, as a result integer programming is required when we want to find whole or discrete values, such as the optimal number of parts to produce. Linear programming is good for values that could be continuous or not whole values, such as the most cost effective length of a road or optimal temperature to grow roses.
 
 ------------------------------------------------------------------------
 
