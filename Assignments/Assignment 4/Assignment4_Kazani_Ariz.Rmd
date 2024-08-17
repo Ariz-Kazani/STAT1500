@@ -245,15 +245,15 @@ solution$objval
 
 ### C. Interpret the solution, including the values of x1x_1x1 and x2x_2x2, and the maximum value of ZZZ.
 
-(side not I have not clue what x1x_1x1, x2x_2x2 and ZZZ is so im going to assume its asking for x1, x2 and Z)
+(side note I have not clue what x1x_1x1, x2x_2x2 and ZZZ is so I'm going to assume its asking for x1, x2 and Z)
 
-The max value of x1 and x2 are both greater than zero meaning that some x1s and some x2s are required to reach the maximum value, 31.666666 in this case.
+The max value of x1 and x2 are both greater than zero meaning that some x1s and some x2s are required to reach the maximum value, 31.666666 in this case. When performing an objective function coefficient analysis we can see that increasing either of the objective coefficients increased the maximum val and decreasing either had the opposite affect. Increasing the coefficient of x1 to \>= 4 made the optimal x2 value 0. When performing a RHS analysis we can see that The maximum decreasing the first and last, decreased the possible maximum value increasing them had the opposite effect, where moving the middle number up to 50 and down to -99999 had no effect, moving the middle number any higher causes the maximum value become 0 with optimal values for x1 and x2 also becoming 0. When performing a constraint coefficient analysis we can see that increasing the coefficients of the first restriction reduces the maximum value, decreasing them has the same affect. Increasing the coefficients in the second restriction had no affect and decreasing the coefficients decreased the maximum value. The coefficients in the last restriction behaved like the first restriction.
 
 ------------------------------------------------------------------------
 
 ## 4. Integer Programming
 
-### A. Formulate the following integer programming problem: Maximize 𝑍 = 4𝑥1 + 3𝑥2 Subject to:
+### A. Formulate the following integer programming problem: Maximize 𝑍 = 4x~1~ + 3x~2~ Subject to:
 
 -   3x~1~ + 2x~2~ \<= 12
 -   x~1~ − x~2~ \>= 1
