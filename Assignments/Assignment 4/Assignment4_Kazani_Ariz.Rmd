@@ -304,26 +304,69 @@ data \<- c(5.1, 4.9, 5.7, 5.5, 5.0, 4.8, 5.2, 5.6, 4.7, 5.3)
 Write an R function to perform bootstrap resampling and calculate the mean for each resample. Perform 10,000 bootstrap resamples.
 
 ```{r}
+data <- c(5.1, 4.9, 5.7, 5.5, 5.0, 4.8, 5.2, 5.6, 4.7, 5.3)
 
+bootstrapMean <- function(data, resamples) {
+  n <- length(data)
+  medians <- numeric(resamples)
+  for (i in 1:resamples) {
+    resample <- sample(data, n, replace = TRUE)
+    medians[i] <- mean(resample)
+  }
+  return(medians)
+}
+
+set.seed(7)
+
+BSMeans <- bootstrapMean(data, 10000)
+
+head(BSMeans)
 ```
 
 ### B. Construct a histogram of the bootstrap means and calculate the 95% confidence interval for the mean based on the bootstrap samples.
 
 ```{r}
-
+hist(BSMeans, main = "Histogram of Bootstrap Medians", xlab = "Median")
+BSCI <- quantile(BSMeans, c(0.025, 0.975))
+BSCI
 ```
 
 ### C. Compare the bootstrap confidence interval with the theoretical confidence interval based on the normal distribution. Discuss any differences.
 
 ```{r}
-
+mTCI <- mean(data)
+sTCI <- sd(data)
+nTCI <- length(data)
+seTCI <- sTCI / sqrt(nTCI)
+TCI <- mTCI + c(qnorm(0.025), qnorm(0.975)) * seTCI
+print("Theoretical Confidence Interval")
+TCI
+print("Bootstrap Confidence Interval")
+BSCI
 ```
+
+We observer that the Bootstrap Confidence Interval is a very slightly narrower, meaning the original dataset is normally distributed. 
 
 ### D. Evaluate the impact of the sample size on the bootstrap confidence interval by repeating the bootstrap process with different sample sizes (e.g., n=5, n=20) and comparing the results.
 
 ```{r}
 
+set.seed(7)
+
+SS <- sample(data, 5, replace = TRUE)
+LS <- sample(data, 20, replace = TRUE)
+
+SM <- bootstrapMean(SS, 10000)
+LM <- bootstrapMean(LS, 10000)
+
+SCI <- quantile(SM, c(0.025, 0.975))
+LCI <- quantile(LM, c(0.025, 0.975))
+
+list(SmallCI = SCI, LargeCI = LCI)
+
 ```
+
+We can see that the confidence interval for the large sample is narrower, indicating more precise estimates.
 
 ------------------------------------------------------------------------
 
