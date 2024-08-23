@@ -24,25 +24,20 @@ output: pdf_document
 # install.packages("rmarkdown")
 library(rmarkdown)
 
-# install.packages("ggplot2")
-library(ggplot2)
+# install.packages("dplyr")
+library(dplyr)
 
 # install.packages("lpSolve")
 library(lpSolve)
 
-# useful libraries not required for this assignment
-# install.packages("patchwork")
-# library(patchwork)
+#install.packages("ompr")
+library(ompr)
 
-# install.packages("dplyr")
-# library(dplyr)
+#install.packages("ompr.roi")
+library(ompr.roi)
 
-# install.packages("tidyr")
-# library(tidyr)
-
-# install.packages("gapminder")
-# library(gapminder)
-
+#install.packages("ROI.plugin.glpk")
+library(ROI.plugin.glpk)
 ```
 
 ------------------------------------------------------------------------
@@ -70,9 +65,7 @@ pTrans <- matrix(c(
 pTrans
 ```
 
-### B. Write an R function to simulate the Markov Chain for 100 steps starting from state A. Plot the state
-
-transitions over time.
+### B. Write an R function to simulate the Markov Chain for 100 steps starting from state A. Plot the state transitions over time.
 
 ```{r}
 simMC <- function(tMatrix, start, numRow, numSteps) {
@@ -97,8 +90,8 @@ plot(
   type = "p",
   pch = 19,
   lwd = 1,
-  xlab = "Step #",
-  ylab = "State Probability",
+  xlab = "Step Number",
+  ylab = "State",
   main = "Marlkov Chain Simulation Over Steps"
 )
 
@@ -182,7 +175,7 @@ plot(
   ylab = "Y",
   asp = 1
 )
-
+symbols(0, 0, circles = 0.5, add = TRUE, inches = FALSE)
 legend(
   legend = c("Inside Circle", "Outside Circle"),
   col = c("green", "red"),
@@ -206,7 +199,7 @@ cat("Estimated Value of pi with 100000000 random numbers", ePi(100000000), "\n")
 cat("True value of pi", 3.1415926)
 ```
 
-As we can observe, the more points that are generated, the more accurate the simulations gets, with 100000000 points getting a accuracy of 5 digits. On a side note, each simulation to an exponentially greater time than the previous.
+As we can observe, the more points that are generated, the more accurate the simulations gets, with 100000000 points getting a accuracy of 5 digits. On a side note, each simulation to an exponentially longer time than the previous, and uses an exponential amount of memory (ram).
 
 ------------------------------------------------------------------------
 
@@ -215,7 +208,7 @@ As we can observe, the more points that are generated, the more accurate the sim
 ### A. Formulate the following linear programming problem: Maximize Z = 3x~1~ + 2x~2~ Subject to:
 
 -   2x~1~ + x~2~ \<= 20
--   4x~1~ − 5x~2~ \>= −10
+-   4x~1~ - 5x~2~ \>= -10
 -   x~1~ + 2x~2~ \<= 15
 -   x~1~, x~2~ \>= 0
 
@@ -253,10 +246,10 @@ The max value of x1 and x2 are both greater than zero meaning that some x1s and 
 
 ## 4. Integer Programming
 
-### A. Formulate the following integer programming problem: Maximize 𝑍 = 4x~1~ + 3x~2~ Subject to:
+### A. Formulate the following integer programming problem: Maximize Z = 4x~1~ + 3x~2~ Subject to:
 
 -   3x~1~ + 2x~2~ \<= 12
--   x~1~ − x~2~ \>= 1
+-   x~1~ - x~2~ \>= 1
 -   x~1~, x~2~ \>= 0 and integers
 
 ```{r}
@@ -273,21 +266,28 @@ The max value of x1 and x2 are both greater than zero meaning that some x1s and 
 ### B. Solve the integer programming problem using the ompr package in R. Provide the R code and solution.
 
 ```{r}
-objective <- c(4, 3)
-constraints <- matrix(c(3, 2, 1, 1), nrow = 2, byrow = TRUE)
-rhs <- c(12, 1)
-directions <- c("<=", ">=")
-solution <- lp("max", objective, constraints, directions, rhs, all.int = TRUE)
+model <- MIPModel() %>%
+  add_variable(x1, type = "integer", lb = 0) %>%
+  add_variable(x2, type = "integer", lb = 0) %>%
+  set_objective(4 * x1 + 3 * x2, "max") %>%
+  add_constraint(3 * x1 + 2 * x2 <= 12) %>%
+  add_constraint(x1 - x2 >= 1)
 
-solution$solution
-solution$objval
+result <- solve_model(model, with_ROI(solver = "glpk"))
+
+solution <- bind_cols(
+  x1 = get_solution(result, x1),
+  x2 = get_solution(result, x2),
+  max = result %>%
+  objective_value()
+)
+
+solution
 ```
 
 ### C. Interpret the solution, including the values of x~1~ and x~2~, and the maximum value of Z.
 
-The max value of x1 is 0, and x2 is greater than zero meaning that 0 x1s and some x2s are required to reach the maximum value, 18 in this case.
-
-When performing an objective function coefficient analysis we can see that increasing either of the objective coefficients increased the maximum val and decreasing either had the opposite affect. When performing a RHS analysis we can see that increasing the first number increases the maximum value, decreased opposite effect. where moving the second number up to 6 and down to -99999 had no effect, moving the second number any higher causes the maximum value to become 0 with optimal values for x1 and x2 also becoming 0. When performing a constraint coefficient analysis we can see that increasing the coefficients of the first as no effect for the first one and the second one causes the maximum value to go to zero, decreasing them causes the maximum value. Increasing the coefficients in the second restriction had no affect and decreasing the coefficients decreased the maximum value, only for the second one in the second restriction.
+The max value of x2 is 0, and x1 is greater than zero meaning that 0 x1s and 0 x2s are required to reach the maximum value, 16 in this case. When performing an objective function coefficient analysis we can see that increasing either of the coefficients, increased the maximum val and decreasing the fist one had the opposite affect. When performing a RHS analysis we can see that increasing the first number increases the maximum value, decreased opposite effect. When moving the second number up to 4 and down to -0.9999 had no effect, moving the second number any higher causes the maximum value to become 0 with optimal values for x1 and x2 also becoming 0 any lower and the max number would increase. When performing a constraint coefficient analysis we can see that increasing the coefficients of the first restriction causes the maximum value to go down, and the opposite happens when we increase. For the second coefficient in the first restriction, increasing the number had no effect but decreasing it caused the maximum value to increase. Increasing the coefficients in the second restriction, the first one increased the maximum value and the second one had no affect. Decreasing the coefficients decreased the maximum value, only for the second coefficient in the second restriction.
 
 ### D. Discuss the differences between the linear and integer programming solutions and the situations in which integer programming is necessary.
 
@@ -308,12 +308,12 @@ data <- c(5.1, 4.9, 5.7, 5.5, 5.0, 4.8, 5.2, 5.6, 4.7, 5.3)
 
 bootstrapMean <- function(data, resamples) {
   n <- length(data)
-  medians <- numeric(resamples)
+  means <- numeric(resamples)
   for (i in 1:resamples) {
     resample <- sample(data, n, replace = TRUE)
-    medians[i] <- mean(resample)
+    means[i] <- mean(resample)
   }
-  return(medians)
+  return(means)
 }
 
 set.seed(7)
@@ -345,7 +345,7 @@ print("Bootstrap Confidence Interval")
 BSCI
 ```
 
-We observer that the Bootstrap Confidence Interval is a very slightly narrower, meaning the original dataset is normally distributed. 
+We observer that the Bootstrap Confidence Interval is a very slightly narrower, meaning the original dataset is normally distributed.
 
 ### D. Evaluate the impact of the sample size on the bootstrap confidence interval by repeating the bootstrap process with different sample sizes (e.g., n=5, n=20) and comparing the results.
 
@@ -380,26 +380,75 @@ x <- rnorm(100)
 y <- 2 + 3*x + rnorm(100)
 ```
 
-Fit a linear regression model 𝑦 = B~0~ + B~1~ x + e and use bootstrap resampling to estimate the standard errors of the regression coefficients.
+Fit a linear regression model y = B~0~ + B~1~ x + e and use bootstrap resampling to estimate the standard errors of the regression coefficients.
 
 ```{r}
+set.seed(123)
 
+x <- rnorm(100)
+y <- 2 + 3*x + rnorm(100)
+
+model <- lm(y ~ x)
+
+SERM <- list(b0 = summary(model)$coefficients[1, 2], b1 = summary(model)$coefficients[2, 2])
+SERM
 ```
 
 ### B. Perform 10,000 bootstrap resamples and calculate the standard errors for B~0~ and B~1~.
 
 ```{r}
+bootstrap2 <- function(data, nums) {
+  x <- data$x
+  y <- data$y
+  n <- length(x)
+  
+  b0 <- numeric(nums)
+  b1 <- numeric(nums)
+  
+  for (i in 1:nums) {
+    resample <- sample(1:n, replace = TRUE)
+    xV <- x[resample]
+    yV <- y[resample]
+    val <- lm(yV ~ xV)
+    b0[i] <- coef(val)[1]
+    b1[i] <- coef(val)[2]
+  }
+  
+  return(list(b0 = b0, b1 = b1))
+}
 
+set.seed(123)
+resamples <- bootstrap2(data.frame(x = x, y = y), 10000)
+print("SE Bootstrap")
+SEBS <- list(b0 = sd(resamples$b0), b1 = sd(resamples$b1))
+SEBS
 ```
 
 ### C. Compare the bootstrap standard errors with the standard errors obtained from the original regression model.
 
 ```{r}
-
+print("SE Bootstrap methods: ")
+SEBS
+print("SE regression model: ")
+SERM
 ```
 
 ### D. Evaluate the impact of the sample size on the bootstrap standard errors by repeating the bootstrap process with different sample sizes (e.g., n=50, n=200) and comparing the results.
 
 ```{r}
+set.seed(123)
 
+sx <- sample(x, 50, replace = TRUE)
+lx <- sample(x, 200, replace = TRUE)
+sy <- sample(y, 50, replace = TRUE)
+ly <- sample(y, 200, replace = TRUE)
+
+resamplesS <- bootstrap2(data.frame(x = sx, y = sy), 10000)
+resamplesL <- bootstrap2(data.frame(x = lx, y = ly), 10000)
+print("Small Samples")
+list(b0 = sd(resamplesS$b0), b1 = sd(resamplesS$b1))
+print("Large Samples")
+list(b0 = sd(resamplesL$b0), b1 = sd(resamplesL$b1))
 ```
+
+we can see that the standard error is much lower with the greater sample size indicating that as the sample size increases, so does the accuracy of our prediction.
