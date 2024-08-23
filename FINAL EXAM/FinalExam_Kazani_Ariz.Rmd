@@ -15,10 +15,12 @@ output: pdf_document
 
 # Notes
 
+The CSV file required for question 1, should be in the same directory as this folder.
+
 ```{r}
 # Libraries
 
-# NOTE: if you do not have any of the below libraries installed, 
+# NOTE: if you do not have any of the below libraries installed,
 # un-comment the line and run it
 
 # install.packages("rmarkdown")
@@ -62,9 +64,7 @@ library(ROI.plugin.glpk)
 
 ## 1.
 
-### A previous consultant had created a chart for a movie review website which is illustrated below. However, the
-
-R code used to create the diagram has since been lost and cannot be recovered. Your task is to come up with the code that will re-create the same chart making it look as close as possible to the original. A new dataset has been supplied – MovieReviewData.csv.
+### A previous consultant had created a chart for a movie review website which is illustrated below. However, the R code used to create the diagram has since been lost and cannot be recovered. Your task is to come up with the code that will re-create the same chart making it look as close as possible to the original. A new dataset has been supplied – MovieReviewData.csv.
 
 ```{r}
 movieReviewData <- read.csv("MovieReviewData.csv")
@@ -79,6 +79,7 @@ genresTK <- c("action", "adventure", "animation", "comedy", "drama")
 movieReviewData <- movieReviewData %>% filter(Studio %in% studiosTK)
 movieReviewData <- movieReviewData %>% filter(Genre %in% genresTK)
 
+set.seed(7)
 ggplot(movieReviewData) +
   geom_jitter(aes(
     x = Genre,
@@ -125,8 +126,8 @@ getXn <- function(xPrev) {
 }
 
 # testinng function
-getXn(10) #should be 10
-getXn(99) #should be 90
+getXn(11) #should be 12
+getXn(99) #should be 80
 getXn(50) #should be 50
 ```
 
@@ -135,7 +136,7 @@ getXn(50) #should be 50
 0 for all n \>= N. Write a program to find all cycles of the middle square method.
 
 ```{r}
-# technically all number 1 - 99 will eventually create a cycle, I'm going to 
+# technically all numbers will eventually create a cycle, I'm going to
 # assume this question is asking for what numbers is xn-1 == xn
 getCycles <- function() {
   rv <- c()
@@ -166,12 +167,14 @@ Using a Monte Carlo simulation, what is the probability that you will not make i
 getProbParty <- function(n) {
   r1 <- runif(n, 2, 6)
   r2 <- runif(n, 1, 7)
-  return(r1+r2)
+  return(r1 + r2)
 }
 
 set.seed(7)
 numFail <- sum(getProbParty(10000) > 9)
-cat("The probablility I will not make it to the party is.", numFail/10000, "%\n")
+cat("The probablility I will not make it to the party is.",
+    numFail / 10000,
+    "%\n")
 ```
 
 ------------------------------------------------------------------------
@@ -184,11 +187,11 @@ Using the bisection method, show that f(x) = x\^3 - sin\^2(x)
 
 ```{r}
 fx <- function(x) {
-  return(x^3 - sin(x)^2)
+  return(x ^ 3 - sin(x) ^ 2)
 }
 
 bisection <- function(f, a, b, tol = 1e-4, maxI = 1000) {
-  if (f(a) * f(b) >= 0 ) {
+  if (f(a) * f(b) >= 0) {
     return("fail")
   }
   
@@ -198,14 +201,15 @@ bisection <- function(f, a, b, tol = 1e-4, maxI = 1000) {
     c <- (a + b) / 2
     if (f(c) == 0) {
       return(c)
-    } else if (f(a) * f(c) < 0){
+    } else if (f(a) * f(c) < 0) {
       b <- c
     } else {
       a <- c
     }
     if (abs(f(c)) < tol || i >= maxI) {
       i <- i + 1
-      break;
+      break
+      
     }
     i <- i + 1
   }
@@ -223,7 +227,7 @@ Since we got an answer and not an error we can conclude that there is a root bet
 bisection(fx, 0.5, 1)
 ```
 
-### C. Determine the maximum number of iterations necessary to solve f(x) = 0 with 10\^−4. How does this compare with (b).
+### C. Determine the maximum number of iterations necessary to solve f(x) = 0 with 10\^-4. How does this compare with (b).
 
 ```{r}
 maxNumI <- function(a, b, tol) {
@@ -246,10 +250,7 @@ Alice has two favorite foods: pasta and salad. If she has pasta one night, there
 Note: I'm going to assume if Alice doesn't eat one she is going to eat the other.
 
 ```{r}
-pTrans <- matrix(c(
-  0.4, 0.7,
-  0.6, 0.3
-), nrow = 2, byrow = TRUE)
+pTrans <- matrix(c(0.4, 0.7, 0.6, 0.3), nrow = 2, byrow = TRUE)
 
 MC <- function(tMatrix, start, numSteps) {
   p <- start
@@ -260,7 +261,7 @@ MC <- function(tMatrix, start, numSteps) {
   return(p)
 }
 
-MC(pTrans, c(1,0), 4)
+MC(pTrans, c(1, 0), 4)
 ```
 
 There is a 45.78% chance that Alice will have salad on Thursday.
@@ -268,7 +269,7 @@ There is a 45.78% chance that Alice will have salad on Thursday.
 ### B. In the long run, what percentage of her dinners will be salad?
 
 ```{r}
-MC(pTrans, c(1,0), 999)
+MC(pTrans, c(1, 0), 999)
 ```
 
 In the long term Alice will have a salad about 46.15% of the time
@@ -277,7 +278,7 @@ In the long term Alice will have a salad about 46.15% of the time
 
 ```{r}
 simMC <- function(tMatrix, start, numRow, numSteps) {
-  states <- numeric(numSteps + 1) 
+  states <- numeric(numSteps + 1)
   states[1] <- sample(1:numRow, 1, prob = start)
   for (i in 1:numSteps) {
     states[i + 1] <- sample(1:numRow, 1, prob = tMatrix[, states[i]])
@@ -287,7 +288,7 @@ simMC <- function(tMatrix, start, numRow, numSteps) {
 }
 
 set.seed(7)
-simMC(pTrans, c(1,0), 2, 5)
+simMC(pTrans, c(1, 0), 2, 5)
 ```
 
 If Alice starts with pasta, she will eat pasta 3 times over the next 5 days
@@ -295,10 +296,10 @@ If Alice starts with pasta, she will eat pasta 3 times over the next 5 days
 ### D. Analytically compute the distribution of dinner choices on day 5.
 
 ```{r}
-p <- MC(pTrans, c(1,0), 5)
+p <- MC(pTrans, c(1, 0), 5)
 p
-p[1,1] * 5
-p[2,1] * 5
+p[1, 1] * 5
+p[2, 1] * 5
 ```
 
 ## Based on the probabilities we can see that Alice would have had 3 pastas and 2 salads by rounding the probabilities.
@@ -338,7 +339,7 @@ solution <- bind_cols(
   x3 = get_solution(result, x3),
   x4 = get_solution(result, x4),
   max = result %>%
-  objective_value()
+    objective_value()
 )
 
 solution
@@ -500,4 +501,4 @@ BSCI <- quantile(BSMED, c(0.025, 0.975))
 BSCI
 ```
 
-The bootsrap estimates stay the same indicating a high level of precission and stability. 
+The bootsrap estimates stay the same indicating a high level of precision and stability. 
